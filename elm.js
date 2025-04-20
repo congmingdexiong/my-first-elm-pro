@@ -1,4 +1,4 @@
-(function(scope){
+e,(function(scope){
 'use strict';
 
 function F(arity, fun, wrapper) {

@@ -1,52 +1,101 @@
-module Main exposing (main)
+module Main exposing (..)
 
-import Browser
-import Html exposing (Html, button, div, text)
-import Html.Events exposing (onClick)
+import Element exposing (..)
+-- import Element exposing (Element, el, text, row, alignRight, fill, width, rgb255, spacing, centerY, padding)
+import Element.Background as Background
+import Element.Border as Border
+import Element.Font as Font
+import Element.Input as Input
+import Html exposing (Html, div)
 
+blue =
+    Element.rgb255 238 238 238
 
--- MODEL
-type alias Model =
-    Int
-
-
--- INIT
-init : () -> ( Model, Cmd Msg )
-init _ =
-    (0, Cmd.none)
-
-
--- UPDATE
-type Msg
-    = Increment
-    | Decrement
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        Increment ->
-            (model + 1, Cmd.none)
-
-        Decrement ->
-            (model - 1, Cmd.none)
-
-
--- VIEW
-view : Model -> Html Msg
-view model =
-    div []
-        [ button [ onClick Decrement ] [ text "-" ]
-        , div [] [ text (String.fromInt model) ]
-        , button [ onClick Increment ] [ text "+" ]
+myButton =
+    Input.button
+        [ Background.color blue
+        , Element.focused
+            [ Background.color blue ]
         ]
-
-
--- MAIN
-main =
-    Browser.element
-        { init = init
-        , update = update
-        , view = view
-        , subscriptions = \_ -> Sub.none
+        { onPress = Just ClickMsg
+        , label = text "My Button"
         }
+
+main = 
+    Element.layout []
+        myRowOfStuff
+
+
+type Msg
+    = ClickMsg
+-- myElement1 =
+--     div
+--         [ Background.color (rgb 0 0.5 0)
+--         , Border.color (rgb 0 0.7 0)
+--         ]
+--         (Element.text "You've made a stylish element!")
+myRowOfStuff : Element msg
+myRowOfStuff =
+   column
+        [ spacing 20
+        , padding 20
+        , Background.color (rgb255 240 240 240)
+        ]
+        [ row
+            [ spacing 20
+            , padding 10
+            , Background.color (rgb255 200 230 255)
+            ]
+            [ el
+                [ width (px 100)
+                , height (px 50)
+                , Background.color (rgb255 180 200 255)
+                , Border.rounded 5
+                , centerX
+                , centerY
+                ]
+                (text "Row 1 - Item 1")
+            , paragraph []
+                [ text "lots of text ...."
+                , el [ Font.bold ] (text "this is bold")
+                , text "lots of text ...."
+                ]
+            ]
+        , row
+            [ spacing 20
+            , padding 10
+            , Background.color (rgb255 255 200 200)
+            ]
+            [ el
+                [ width (px 100)
+                , height (px 50)
+                , Background.color (rgb255 255 180 180)
+                , Border.rounded 5
+                , centerX
+                , centerY
+                ]
+                (text "Row 2 - Item 1")
+            , el
+                [ width (px 100)
+                , height (px 50)
+                , Background.color (rgb255 255 180 180)
+                , Border.rounded 5
+                , centerX
+                , centerY
+                ]
+                (text "Row 2 - Item 2")
+            ]
+        ]
+   
+
+
+
+myElement : Element msg
+myElement =
+    el
+        [ Background.color (rgb255 240 0 245)
+        , Font.color (rgb255 255 255 255)
+        , Border.rounded 3
+        , padding 30
+        ]
+        (text "stylish!")
