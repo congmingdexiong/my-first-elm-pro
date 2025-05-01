@@ -1,0 +1,8 @@
+﻿{
+  "git-dependencies": {
+    "direct": {
+      "https://github.com/rakutentech/r10.git": "7.0.0"
+    },
+    "indirect": {}
+  }
+}
