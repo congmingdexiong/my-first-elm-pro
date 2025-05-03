@@ -2,18 +2,18 @@ module R10.Form.Internal.Shared exposing
     ( Form
     , copyEmailIntoUsernameCheckboxKey
     , defaultEmailFieldKeyString
+    , defaultHideShowPasswordCheckboxKey
     , defaultMobilePhoneFieldKeyString
     , defaultUsernameFieldKeyString
-    , defaultHideShowPasswordCheckboxKey
     , flagIconPositions
     , toPhonePlaceholder
     )
 
 import Dict
+import R10.Country
 import R10.Form.Internal.Conf
 import R10.Form.Internal.Key
 import R10.Form.Internal.State
-import R10.Country
 
 
 {-| Forms are composed of two parts: a configuration and a state.
@@ -52,7 +52,7 @@ defaultHideShowPasswordCheckboxKey =
 toPhonePlaceholder : String -> Maybe R10.Country.Country -> Maybe String
 toPhonePlaceholder fieldKey maybeCountry =
     Maybe.andThen
-        (\country -> 
+        (\country ->
             case ( fieldKey, country ) of
                 ( "mobile_phone", R10.Country.Japan ) ->
                     Just "08011112222"
@@ -65,7 +65,7 @@ toPhonePlaceholder fieldKey maybeCountry =
 
                 ( "fax", R10.Country.Japan ) ->
                     Just "08011112222"
-                
+
                 _ ->
                     Nothing
         )

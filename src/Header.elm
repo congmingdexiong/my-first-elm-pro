@@ -1,10 +1,13 @@
-module R10.Header exposing (view, Header, LanguageSystem(..), Msg(..), Session(..), SessionData, ViewArgs, attrsLink, closeMenu, decodeSession, extraCss, getSession, init, languageMenu, urlLogin, logoutLink, menuSeparator, menuTitle, subscriptions, update, userExample, iconHamburger, cssHamburger)
+module Header exposing (main)
 
 {-| This create a generic header.
 
 @docs view, Header, LanguageSystem, Msg, Session, SessionData, ViewArgs, attrsLink, closeMenu, decodeSession, extraCss, getSession, init, languageMenu, urlLogin, logoutLink, menuSeparator, menuTitle, subscriptions, update, userExample, iconHamburger, cssHamburger
 
 -}
+
+-- import R10.Color.Internal.Primary
+-- import R10.Transition
 
 import Browser.Events
 import Color
@@ -20,8 +23,8 @@ import Http
 import Json.Decode
 import Process
 import R10.Card
+import R10.Color
 import R10.Color.AttrsBackground
-import R10.Color.Internal.Primary
 import R10.Color.Svg
 import R10.Color.Utils
 import R10.Context exposing (..)
@@ -31,9 +34,18 @@ import R10.Language
 import R10.Libu
 import R10.Mode
 import R10.Theme
-import R10.Transition
 import R10.Translations
 import Task
+
+
+main : Program () Model Msg
+main =
+    Browser.element
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = \_ -> Sub.none
+        }
 
 
 {-| -}
@@ -397,7 +409,9 @@ fontColorHeader :
         | darkHeader : Bool
         , theme :
             { mode : R10.Mode.Mode
-            , primaryColor : R10.Color.Internal.Base.Color
+            , primaryColor : R10.Color.Primary
+
+            -- , primaryColor : R10.Color.Internal.Primary.Color
             }
     }
     -> Color
@@ -420,7 +434,8 @@ view model args =
     el
         [ padding 0
         , width fill
-        , R10.Transition.transition "background 0.4s"
+
+        -- , R10.Transition.transition "background 0.4s"
         , htmlAttribute <| Html.Attributes.style "z-index" "20"
         , if args.darkHeader then
             case model.backgroundColor of
@@ -466,7 +481,8 @@ header model args =
         , centerX
         , R10.FontSize.normal
         , paddingXY 30 0
-        , R10.Transition.transition "height 0.3s, box-shadow 0.5s"
+
+        -- , R10.Transition.transition "height 0.3s, box-shadow 0.5s"
         , Border.shadow
             { offset = ( 0, 0 )
             , size = 0
@@ -506,8 +522,7 @@ header model args =
 userSection : Header -> ViewArgs z msg route -> List (Element (R10.Context.ContextInternal z) msg)
 userSection model args =
     [ el
-        [ R10.Transition.transition "transform 0.2s"
-        , inFront <|
+        [ inFront <|
             if model.userMenuOpen then
                 userMenu model args
 
@@ -516,11 +531,10 @@ userSection model args =
         ]
       <|
         let
-            transition =
-                R10.Transition.transition "opacity 0.5s"
-
+            -- transition =
+            --     R10.Transition.transition "opacity 0.5s"
             emptyButton =
-                el [ alpha 0, transition ] none
+                el [ alpha 0 ] none
         in
         case model.session of
             SessionNotRequired ->
@@ -536,8 +550,7 @@ userSection model args =
                 rightArea model
                     args
                     (el
-                        [ transition
-                        , htmlAttribute <| Html.Attributes.class "visibleDesktop"
+                        [ htmlAttribute <| Html.Attributes.class "visibleDesktop"
                         ]
                      <|
                         text user.email
@@ -547,8 +560,7 @@ userSection model args =
                 rightArea model
                     args
                     (el
-                        [ transition
-                        , htmlAttribute <| Html.Attributes.class "visibleDesktop"
+                        [ htmlAttribute <| Html.Attributes.class "visibleDesktop"
                         ]
                      <|
                         loginButton model args
@@ -584,7 +596,6 @@ rightMenuButton darkHeader theme =
         , Font.bold
         , Font.color <| logoColor darkHeader theme
         , mouseOver [ Background.color <| rgba 0 0 0 0.05 ]
-        , R10.Transition.transition "background 0.2s"
         ]
     <|
         text "⋮"
@@ -809,7 +820,6 @@ loginButton model args =
 attrsLink : List (Attribute (R10.Context.ContextInternal z) msg)
 attrsLink =
     [ mouseOver [ Background.color <| rgba 0 0 0 0.05 ]
-    , R10.Transition.transition "background 0.2s"
     , width fill
     , paddingXY 20 13
     ]
@@ -844,7 +854,7 @@ logoColorColor darkHeader theme =
         Color.rgb 1 1 1
 
     else
-        R10.Color.Internal.Primary.toColor theme theme.primaryColor
+        Color.rgb 1 1 1
 
 
 {-| -}
@@ -863,13 +873,11 @@ hambergAndLogo model args =
         [ map args.msgMapper <|
             el
                 [ moveDown (fromTop args.isTop)
-                , R10.Transition.transition "transform 0.2s"
                 ]
             <|
                 iconHamburger { isActive = model.sideMenuOpen, onPress = ToggleSideMenu }
         , R10.Libu.view
             [ moveDown (fromTop args.isTop + 2)
-            , R10.Transition.transition "transform 0.2s"
             ]
             { label =
                 logo
@@ -901,7 +909,6 @@ iconHamburger args =
         , width <| px 55
         , height <| px 55
         , mouseOver [ Background.color <| rgba 0 0 0 0.05 ]
-        , R10.Transition.transition "background 0.2s"
         , scale 0.7
         ]
         { label =
@@ -933,7 +940,6 @@ cover model args =
              , Background.color <| rgba 0 0 0 0.5
              , htmlAttribute <| Html.Attributes.style "position" "fixed"
              , htmlAttribute <| Html.Attributes.style "height" "100vh"
-             , R10.Transition.transition "opacity 0.2s, visibility 0.2s"
              , Events.onClick ToggleSideMenu
              ]
                 ++ (if model.sideMenuOpen then
@@ -971,7 +977,6 @@ sideMenu model args =
         , R10.FontSize.normal
         , width <| px 300
         , paddingEach { top = 60, right = 0, bottom = 20, left = 0 }
-        , R10.Transition.transition "transform 0.2s"
         , htmlAttribute <| Html.Attributes.style "position" "fixed"
         , htmlAttribute <| Html.Attributes.style "height" "100vh"
         , scrollbarY

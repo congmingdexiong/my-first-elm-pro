@@ -100,14 +100,13 @@ paragraphFromString attrs args =
 
             else
                 []
-
     in
     withContext <|
         \c ->
             column
                 ([ width fill
-                , spacing 10
-                ]
+                 , spacing 10
+                 ]
                     -- Fix break line issue for IE
                     ++ fixFlexIE c.contextR10.device
                 )

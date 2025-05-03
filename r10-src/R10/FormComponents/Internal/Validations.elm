@@ -176,9 +176,10 @@ animatedList elements =
                 , Font.size 14
                 , alpha 1
                 , htmlAttribute <| Html.Attributes.style "min-height" "24px"
+
                 -- 2022.06.14 We don't remember why the max-height was set here.
-                -- We remove because is hiding part of the error if very long. 
-                -- Leaving this comment here in case we realize there was a purpose for it. 
+                -- We remove because is hiding part of the error if very long.
+                -- Leaving this comment here in case we realize there was a purpose for it.
                 -- More history could be found in the R10 repo. Reference: https://jira.rakuten-it.com/jira/browse/OMN-5836
                 -- , htmlAttribute <| Html.Attributes.style "max-height" "64px"
                 , transition

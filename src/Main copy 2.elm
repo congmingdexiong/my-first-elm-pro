@@ -1,15 +1,18 @@
 module Main exposing (..)
 
-import Element exposing (..)
 -- import Element exposing (Element, el, text, row, alignRight, fill, width, rgb255, spacing, centerY, padding)
+
+import Element exposing (..)
 import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input as Input
 import Html exposing (Html, div)
 
+
 blue =
     Element.rgb255 238 238 238
+
 
 myButton =
     Input.button
@@ -21,22 +24,28 @@ myButton =
         , label = text "My Button"
         }
 
-main = 
+
+main =
     Element.layout []
         myRowOfStuff
 
 
 type Msg
     = ClickMsg
+
+
+
 -- myElement1 =
 --     div
 --         [ Background.color (rgb 0 0.5 0)
 --         , Border.color (rgb 0 0.7 0)
 --         ]
 --         (Element.text "You've made a stylish element!")
+
+
 myRowOfStuff : Element msg
 myRowOfStuff =
-   column
+    column
         [ spacing 20
         , padding 20
         , Background.color (rgb255 240 240 240)
@@ -86,8 +95,6 @@ myRowOfStuff =
                 (text "Row 2 - Item 2")
             ]
         ]
-   
-
 
 
 myElement : Element msg
