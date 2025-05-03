@@ -7,6 +7,7 @@ import Element.WithContext.Border as Border
 import Element.WithContext.Font as Font
 import Html
 import Html.Attributes
+import Html.Events exposing (onClick)
 import R10.Button
 import R10.Card
 import R10.Color
@@ -64,9 +65,10 @@ view : Model -> Html.Html Msg
 view model =
     layout R10.Context.default [ R10.Color.AttrsBackground.background, padding 20, R10.FontSize.normal ] <|
         row [] <|
+            -- htmlAttribute (Html.Events.onClick Increment)
             [ R10.Button.primary []
                 { label = text "+"
-                , libu = R10.Libu.Li "https://r10.netlify.app"
+                , libu = R10.Libu.Bu (Just Increment)
                 , -- , libu = R10.Libu.Li "https://r10.netlify.app",
                   -- , theme =
                   --     { mode = R10.Mode.Light
@@ -75,7 +77,7 @@ view model =
                   translation = { key = "example" }
                 }
             , R10.Button.primary
-                [ htmlAttribute (Html.Attributes.style "margin-left" "10px") ]
+                [ htmlAttribute (Html.Attributes.style "margin-left" "10px"), htmlAttribute (Html.Events.onClick Decrement) ]
                 { label = text "-"
                 , libu = R10.Libu.Li "https://r10.netlify.app"
                 , -- , libu = R10.Libu.Li "https://r10.netlify.app",
