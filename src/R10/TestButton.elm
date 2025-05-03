@@ -80,7 +80,7 @@ view model =
                 [ htmlAttribute (Html.Attributes.style "margin-left" "10px"), htmlAttribute (Html.Events.onClick Decrement) ]
                 { label = text "-"
                 , libu = R10.Libu.Li "https://r10.netlify.app"
-                , -- , libu = R10.Libu.Li "https://r10.netlify.app",
+                , -- , libu = R10.Libu.Li "https://r10.ntlify.app",
                   -- , theme =
                   --     { mode = R10.Mode.Light
                   --     , primaryColor = R10.Color.primary.crimsonRed ,
