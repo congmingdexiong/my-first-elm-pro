@@ -1,11 +1,13 @@
-module R10.TestHeader exposing (main)
+module R10.TestHeader exposing (Msg, main)
+
+-- import R10.Header
 
 import Browser
 import Element.WithContext exposing (..)
 import Element.WithContext.Background as Background
 import Element.WithContext.Border as Border
 import Element.WithContext.Font as Font
-import Html
+import Html exposing (header)
 import Html.Attributes
 import Html.Events exposing (onClick)
 import R10.Button
@@ -40,82 +42,154 @@ main =
 
 
 type alias Model =
-    { count : Int }
+    { count : Int, headerOption : R10.Header.Header }
 
 
 type Msg
     = Increment
     | Decrement
+    | HeaderMsg R10.Header.Msg
+    | None
 
 
 init : () -> ( Model, Cmd msg )
 init _ =
-    ( { count = 1 }, Cmd.none )
-
-
-update : Msg -> Model -> ( Model, Cmd msg )
-update msg model =
-    case msg of
-        Increment ->
-            ( { model | count = model.count + 1 }, Cmd.none )
-
-        Decrement ->
-            ( { model | count = model.count - 1 }, Cmd.none )
-
-
-view : Model -> Html.Html Msg
-view model =
-    layout R10.Context.default [ R10.Color.AttrsBackground.background, padding 20, R10.FontSize.normal ] <|
-        R10.Header.view
+    ( { count = 1
+      , headerOption =
             { sideMenuOpen = True
             , userMenuOpen = True
             , maxWidth = 1000
             , padding = 20
-            , supportedLanguageList = [ R10.Language.EN_US ]
+            , supportedLanguageList = [ R10.Language.EN_US, R10.Language.DE_DE, R10.Language.FR_FR, R10.Language.ES_ES, R10.Language.IT_IT ]
             , urlLogin = ""
             , urlLogout = ""
             , session = R10.Header.SessionNotRequired
             , debuggingMode = True
             , backgroundColor = Nothing
             }
-        <|
-            { extraContent = []
-            , extraContentRightSide = []
-            , from = "R10"
-            , msgMapper = \_ -> Increment
-            , isTop = True
-            , isMobile = False
-            , onClick = \_ -> Increment
-            , urlTop = ""
-            , languageSystem = R10.Header.LanguageInModel
-            , logoOnDark =
-                R10.Button.primary []
-                    { label = text "+"
-                    , libu = R10.Libu.Bu (Just Increment)
-                    , -- , libu = R10.Libu.Li "https://r10.netlify.app",
-                      -- , theme =
-                      --     { mode = R10.Mode.Light
-                      --     , primaryColor = R10.Color.primary.crimsonRed ,
-                      --     }
-                      translation = { key = "example" }
+      }
+    , Cmd.none
+    )
+
+
+update : Msg -> Model -> ( Model, Cmd msg )
+update msg model =
+    case msg of
+        HeaderMsg headerMsg ->
+            case headerMsg of
+                R10.Header.ToggleSideMenu ->
+                    let
+                        _ =
+                            Debug.log "ToggleSideMenu" model.count
+
+                        _ =
+                            R10.Header.update
+                                R10.Header.ToggleSideMenu
+                            <|
+                                { sideMenuOpen = False
+                                , userMenuOpen = True
+                                , maxWidth = 1000
+                                , padding = 20
+                                , supportedLanguageList = [ R10.Language.EN_US, R10.Language.DE_DE, R10.Language.FR_FR, R10.Language.ES_ES, R10.Language.IT_IT ]
+                                , urlLogin = ""
+                                , urlLogout = ""
+                                , session = R10.Header.SessionNotRequired
+                                , debuggingMode = True
+                                , backgroundColor = Nothing
+                                }
+                    in
+                    ( { model
+                        | headerOption =
+                            { sideMenuOpen = False
+                            , userMenuOpen = True
+                            , maxWidth = 1000
+                            , padding = 20
+                            , supportedLanguageList = [ R10.Language.EN_US, R10.Language.DE_DE, R10.Language.FR_FR, R10.Language.ES_ES, R10.Language.IT_IT ]
+                            , urlLogin = ""
+                            , urlLogout = ""
+                            , session = R10.Header.SessionNotRequired
+                            , debuggingMode = True
+                            , backgroundColor = Nothing
+                            }
+                      }
+                    , Cmd.none
+                    )
+
+                _ ->
+                    ( model, Cmd.none )
+
+        Increment ->
+            -- let
+            --     _ =
+            --         Debug.log "Increment" model.count
+            -- in
+            ( { model | count = model.count + 1 }, Cmd.none )
+
+        Decrement ->
+            ( { model | count = model.count - 1 }, Cmd.none )
+
+        _ ->
+            ( model, Cmd.none )
+
+
+
+-- ToggleSideMenu ->
+--     let
+--         -- send ToggleSideMenu
+--         newModel =
+--             { model
+--                 | count = model.count + 1
+--             }
+--     in
+--     ( model, Cmd.none )
+
+
+view : Model -> Html.Html Msg
+view model =
+    layout R10.Context.default [ R10.Color.AttrsBackground.background, padding 20, R10.FontSize.normal ] <|
+        row [ htmlAttribute (Html.Attributes.style "border" "1px solid blue"), htmlAttribute (Html.Attributes.style "width" "100%") ]
+            [ R10.Header.view
+                model.headerOption
+              <|
+                { extraContent = []
+                , extraContentRightSide = []
+                , from = "R10"
+                , msgMapper = \_ -> None
+                , isTop = True
+                , isMobile = False
+                , onClick = \_ -> HeaderMsg R10.Header.ToggleSideMenu
+                , urlTop = ""
+                , languageSystem = R10.Header.LanguageInModel
+                , logoOnDark =
+                    R10.Button.primary []
+                        { label = text "+"
+                        , libu = R10.Libu.Bu (Just Increment)
+                        , -- , libu = R10.Libu.Li "https://r10.netlify.app",
+                          -- , theme =
+                          --     { mode = R10.Mode.Light
+                          --     , primaryColor = R10.Color.primary.crimsonRed ,
+                          --     }
+                          translation = { key = "example" }
+                        }
+                , logoOnLight =
+                    R10.Button.primary []
+                        { label = text "-"
+                        , libu = R10.Libu.Bu (Just Decrement)
+                        , -- , libu = R10.Libu.Li "https://r10.netlify.app",
+                          -- , theme =
+                          --     { mode = R10.Mode.Light
+                          --     , primaryColor = R10.Color.primary.crimsonRed ,
+                          --     }
+                          translation = { key = "example" }
+                        }
+                , darkHeader = True
+                , theme =
+                    { mode = R10.Mode.Light
+                    , primaryColor = R10.Color.primary.blueSky
                     }
-            , logoOnLight =
-                R10.Button.primary []
-                    { label = text "+"
-                    , libu = R10.Libu.Bu (Just Increment)
-                    , -- , libu = R10.Libu.Li "https://r10.netlify.app",
-                      -- , theme =
-                      --     { mode = R10.Mode.Light
-                      --     , primaryColor = R10.Color.primary.crimsonRed ,
-                      --     }
-                      translation = { key = "example" }
-                    }
-            , darkHeader = True
-            , theme =
-                { mode = R10.Mode.Dark
-                , primaryColor = R10.Color.primary.blueSky
                 }
-            }
+            , text (String.fromInt model.count)
+            ]
 
 
 
