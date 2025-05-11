@@ -1,0 +1,225 @@
+{
+    "editor.fontFamily": "'Fira Code',Consolas",
+    "editor.fontLigatures": true,
+    "explorer.confirmDelete": false,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.fontWeight": "normal",
+    "editor.fontSize": 15,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "explorer.confirmDragAndDrop": false,
+    "workbench.startupEditor": "none",
+    "auto-close-tag.enableAutoCloseTag": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "false",
+        "source.organizeImports": "false"
+    },
+    // "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    // "terminal.integrated.defaultProfile.windows":"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe",
+    // "terminal.integrated.defaultProfile.windows":"PowerShell",
+    // "terminal.integrated.defaultProfile.windows":"C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+    "terminal.integrated.shellArgs.windows": [
+        "/K chcp 65001 > nul"
+    ],
+    // 高亮的颜色，emm暂时只支持这样写
+    "wxmlConfig.activeColor": {
+        "color": "#e5c07b"
+    },
+    // 是否禁用高亮组件
+    "wxmlConfig.activeDisable": false,
+    // 是否开启保存自动格式化
+    "wxmlConfig.onSaveFormat": false,
+    "wxmlConfig.format": {
+        "brace_style": "collapse",
+        "end_with_newline": false,
+        "indent_char": "",
+        "indent_handlebars": false,
+        "indent_inner_html": false,
+        "indent_scripts": "keep",
+        "indent_size": 2,
+        "indent_with_tabs": true,
+        "max_preserve_newlines": 1,
+        "wrap_attributes_count": 4,
+        "unformatted": "['text']",
+        "disable_automatic_closing_labels": false,
+        "preserve_newlines": true,
+        "wrap_attributes": "force-expand-multiline"
+    },
+    // 高亮所忽略的组件数组
+    "wxmlConfig.tagNoActiveArr": [
+        "view",
+        "button",
+        "text",
+        "icon",
+        "image",
+        "navigator",
+        "block",
+        "input",
+        "template",
+        "form",
+        "camera",
+        "textarea"
+    ],
+    "files.associations": {
+        "*.cjson": "jsonc",
+        "*.wxss": "css",
+        "*.wxs": "javascript"
+    },
+    "emmet.includeLanguages": {
+        "wxml": "html"
+    },
+    "minapp-vscode.disableAutoConfig": true,
+    "editor.accessibilitySupport": "off",
+    "bracketPairColorizer.depreciation-notice": false,
+    "[javascript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "git.autofetch": true,
+    "editor.mouseWheelZoom": true,
+    "settingsSync.ignoredExtensions": [],
+    "[html]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "terminal.integrated.fontFamily": "monospace",
+    "files.enableTrash": false,
+    "terminal.integrated.profiles.osx": {
+        "bash": {
+            "path": "bash",
+            "args": [
+                "-l"
+            ],
+            "icon": "terminal-bash"
+        },
+        "zsh": {
+            "path": "zsh",
+            "args": [
+                "-l"
+            ]
+        },
+        "fish": {
+            "path": "fish",
+            "args": [
+                "-l"
+            ]
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
+    "code-runner.runInTerminal": true,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "git.enableSmartCommit": true,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "liveServer.settings.port": "3000",
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "git.confirmSync": false,
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnPaste": true,
+    "workbench.settings.applyToAllProfiles": [],
+    "vue.autoInsert.dotValue": true,
+    "security.workspace.trust.untrustedFiles": "open",
+    "workbench.editorAssociations": {
+        "*.copilotmd": "vscode.markdown.preview.editor",
+        "*.svg": "default"
+    },
+    "gitlens.proxy": {},
+    "code-runner.executorMap": {
+        "javascript": "node",
+        "java": "cd $dir && javac $fileName && java $fileNameWithoutExt",
+        "c": "cd $dir && gcc $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "zig": "zig run",
+        "cpp": "cd $dir && g++ $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "objective-c": "cd $dir && gcc -framework Cocoa $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "php": "php",
+        "python": "python -u",
+        "perl": "perl",
+        "perl6": "perl6",
+        "ruby": "ruby",
+        "go": "go run",
+        "lua": "lua",
+        "groovy": "groovy",
+        "powershell": "powershell -ExecutionPolicy ByPass -File",
+        "bat": "cmd /c",
+        "shellscript": "bash",
+        "fsharp": "fsi",
+        "csharp": "scriptcs",
+        "vbscript": "cscript //Nologo",
+        "typescript": "ts-node",
+        "coffeescript": "coffee",
+        "scala": "scala",
+        "swift": "swift",
+        "julia": "julia",
+        "crystal": "crystal",
+        "ocaml": "ocaml",
+        "r": "Rscript",
+        "applescript": "osascript",
+        "clojure": "lein exec",
+        "haxe": "haxe --cwd $dirWithoutTrailingSlash --run $fileNameWithoutExt",
+        "rust": "cd $dir && rustc $fileName && $dir$fileNameWithoutExt",
+        "racket": "racket",
+        "scheme": "csi -script",
+        "ahk": "autohotkey",
+        "autoit": "autoit3",
+        "dart": "dart",
+        "pascal": "cd $dir && fpc $fileName && $dir$fileNameWithoutExt",
+        "d": "cd $dir && dmd $fileName && $dir$fileNameWithoutExt",
+        "haskell": "runghc",
+        "nim": "nim compile --verbosity:0 --hints:off --run",
+        "lisp": "sbcl --script",
+        "kit": "kitc --run",
+        "v": "v run",
+        "sass": "sass --style expanded",
+        "scss": "scss --style expanded",
+        "less": "cd $dir && lessc $fileName $fileNameWithoutExt.css",
+        "FortranFreeForm": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "fortran-modern": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "fortran_fixed-form": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "fortran": "cd $dir && gfortran $fileName -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+        "sml": "cd $dir && sml $fileName",
+        "mojo": "mojo run",
+        "erlang": "escript",
+        "spwn": "spwn build",
+        "pkl": "cd $dir && pkl eval -f yaml $fileName -o $fileNameWithoutExt.yaml",
+        "gleam": "gleam run -m $fileNameWithoutExt"
+    },
+    // "[elm]": {
+    //   "editor.defaultFormatter": "elmTooling.elm-ls-vscode",
+    //   "editor.formatOnSave": true
+    // },
+    "codeium.enableConfig": {
+        "*": true
+    },
+    "editor.codeActions.triggerOnFocusChange": true,
+    "files.autoSave": "afterDelay",
+    "[elm]": {
+        // "editor.defaultFormatter": "elmTooling.elm-ls-vscode",
+        "formatOnSave": true,
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "elmTooling.elm-ls-vscode",
+    },
+    "elm.formatOnSave": true,
+    "elmLS.trace.server": "off",
+    "elmLS.elmPath": "./node_modules/.bin/elm",
+    "elmLS.elmFormatPath": "elm-format",
+    "elmLS.elmTestPath": "elm-test",
+    "editor.formatOnSave": true
+    // "task.problemMatchers.neverPrompt": false
+}

@@ -6,6 +6,7 @@ import Browser
 import Element.WithContext exposing (..)
 import Element.WithContext.Background as Background
 import Element.WithContext.Border as Border
+import Element.WithContext.Events
 import Element.WithContext.Font as Font
 import Html exposing (header)
 import Html.Attributes
@@ -82,36 +83,13 @@ update msg model =
                         _ =
                             Debug.log "ToggleSideMenu" model.count
 
-                        _ =
+                        headerOpt =
                             R10.Header.update
                                 R10.Header.ToggleSideMenu
                             <|
-                                { sideMenuOpen = False
-                                , userMenuOpen = True
-                                , maxWidth = 1000
-                                , padding = 20
-                                , supportedLanguageList = [ R10.Language.EN_US, R10.Language.DE_DE, R10.Language.FR_FR, R10.Language.ES_ES, R10.Language.IT_IT ]
-                                , urlLogin = ""
-                                , urlLogout = ""
-                                , session = R10.Header.SessionNotRequired
-                                , debuggingMode = True
-                                , backgroundColor = Nothing
-                                }
+                                model.headerOption
                     in
-                    ( { model
-                        | headerOption =
-                            { sideMenuOpen = False
-                            , userMenuOpen = True
-                            , maxWidth = 1000
-                            , padding = 20
-                            , supportedLanguageList = [ R10.Language.EN_US, R10.Language.DE_DE, R10.Language.FR_FR, R10.Language.ES_ES, R10.Language.IT_IT ]
-                            , urlLogin = ""
-                            , urlLogout = ""
-                            , session = R10.Header.SessionNotRequired
-                            , debuggingMode = True
-                            , backgroundColor = Nothing
-                            }
-                      }
+                    ( { model | headerOption = headerOpt }
                     , Cmd.none
                     )
 
@@ -154,10 +132,10 @@ view model =
                 { extraContent = []
                 , extraContentRightSide = []
                 , from = "R10"
-                , msgMapper = \_ -> None
+                , msgMapper = HeaderMsg
                 , isTop = True
                 , isMobile = False
-                , onClick = \_ -> HeaderMsg R10.Header.ToggleSideMenu
+                , onClick = \_ -> None
                 , urlTop = ""
                 , languageSystem = R10.Header.LanguageInModel
                 , logoOnDark =
@@ -189,6 +167,38 @@ view model =
                     }
                 }
             , text (String.fromInt model.count)
+            , column
+                (R10.Card.high
+                    ++ [ centerX
+                       , centerY
+                       , width (fill |> maximum 460)
+                       , height shrink
+                       , spacing 30
+                       , R10.Color.AttrsBackground.surface2dp
+                       , Element.WithContext.Events.onClick Increment
+
+                       --    , Element.WithContext.Events.onClick (HeaderMsg R10.Header.ToggleSideMenu)
+                       ]
+                )
+                [ withContext <| \c -> R10.Svg.LogosExtra.r10 [ centerX ] (R10.Color.Svg.logo c.contextR10.theme) 32
+
+                -- , map MsgForm <|
+                --     R10.Button.primary []
+                --         { label = text "Submit"
+                --         , libu = R10.Libu.Bu <| Just <| R10.Form.msg.submit model.form.conf
+                --         , translation = { key = "example" }
+                --         }
+                ]
+            ,el
+                [ Element.WithContext.Events.onClick Increment ]
+                (withContext <| \c -> R10.Svg.LogosExtra.r10 [ centerX ] (R10.Color.Svg.logo c.contextR10.theme) 32)
+
+                -- , map MsgForm <|
+                --     R10.Button.primary []
+                --         { label = text "Submit"
+                --         , libu = R10.Libu.Bu <| Just <| R10.Form.msg.submit model.form.conf
+                --         , translation = { key = "example" }
+                --         }
             ]
 
 

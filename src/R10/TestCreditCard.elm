@@ -238,7 +238,8 @@ view model =
                    , width (fill |> maximum 460)
                    , height shrink
                    , spacing 30
-                   , R10.Color.AttrsBackground.surface2dp
+                   , R10.Color.AttrsBackground.surface2dpl
+                   , Element.WithContext.Events.onClick
                    ]
             )
             [ withContext <| \c -> R10.Svg.LogosExtra.r10 [ centerX ] (R10.Color.Svg.logo c.contextR10.theme) 32
