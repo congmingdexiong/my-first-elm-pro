@@ -53,6 +53,10 @@ type Msg
     | None
 
 
+type alias HeaderMsg msg =
+    Msg -> msg
+
+
 init : () -> ( Model, Cmd msg )
 init _ =
     ( { count = 1
@@ -189,16 +193,16 @@ view model =
                 --         , translation = { key = "example" }
                 --         }
                 ]
-            ,el
+            , el
                 [ Element.WithContext.Events.onClick Increment ]
                 (withContext <| \c -> R10.Svg.LogosExtra.r10 [ centerX ] (R10.Color.Svg.logo c.contextR10.theme) 32)
 
-                -- , map MsgForm <|
-                --     R10.Button.primary []
-                --         { label = text "Submit"
-                --         , libu = R10.Libu.Bu <| Just <| R10.Form.msg.submit model.form.conf
-                --         , translation = { key = "example" }
-                --         }
+            -- , map MsgForm <|
+            --     R10.Button.primary []
+            --         { label = text "Submit"
+            --         , libu = R10.Libu.Bu <| Just <| R10.Form.msg.submit model.form.conf
+            --         , translation = { key = "example" }
+            --         }
             ]
 
 
