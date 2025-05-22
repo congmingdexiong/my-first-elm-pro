@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Elm App</title>
+  </head>
+  <body>
+    <div id="elm-root"></div>
+    <div id="root"></div>
+    <script
+      defer="defer"
+      src="http://127.0.0.1:30001/public/static/js/main.6930de87.js"
+    ></script>
+    <!-- 引入编译后的 Elm JS -->
+    <script src="elm.js"></script>
+
+    <!-- 初始化 Elm 应用 -->
+    <script>
+      const app = Elm.Main.init({
+        node: document.getElementById("elm-root"),
+      });
+      window.elmApp = app;
+      // 接收 Elm 发来的数据
+      app.ports.sendToReact.subscribe(function (dataFromElm) {
+        // 转发给 React 应用（使用自定义事件）
+        window.dispatchEvent(
+          new CustomEvent("elm-to-react", {
+            detail: dataFromElm,
+          })
+        );
+      });
+
+      // 示例：监听 port（可选）
+      // app.ports.somePort.subscribe(data => {
+      //   console.log("Received from Elm:", data);
+      // });
+    </script>
+  </body>
+</html>

@@ -1,4 +1,4 @@
-module Main exposing (main)
+port module Main exposing (main)
 
 import Browser
 import Element.WithContext exposing (..)
@@ -23,16 +23,18 @@ main =
         { init = init
         , view = view
         , update = update
-        , subscriptions = \_ -> Sub.none
+        , subscriptions = subscriptions
         }
 
 
 type alias Model =
-    { form : R10.Form.Form }
+    { form : R10.Form.Form, message : { id : String } }
 
 
 type Msg
     = MsgForm R10.Form.Msg
+    | SendMsgToReact
+    | GotMessageFromReact String
 
 
 init : () -> ( Model, Cmd msg )
@@ -92,9 +94,16 @@ init _ =
                 ]
             , state = R10.Form.initState
             }
+      , message = { id = "" }
       }
     , Cmd.none
     )
+
+
+port sendToReact : String -> Cmd msg
+
+
+port receiveFromReact : (String -> msg) -> Sub msg
 
 
 update : Msg -> Model -> ( Model, Cmd msg )
@@ -114,6 +123,17 @@ update msg model =
                     { form | state = newState }
             in
             ( { model | form = newForm }, Cmd.none )
+
+        SendMsgToReact ->
+            ( model, sendToReact "Hello from Elm!" )
+
+        GotMessageFromReact str ->
+            ( { model | message = { id = str } }, Cmd.none )
+
+
+subscriptions : Model -> Sub Msg
+subscriptions _ =
+    receiveFromReact GotMessageFromReact
 
 
 view : Model -> Html.Html Msg
@@ -140,11 +160,11 @@ view model =
             [ withContext <| \c -> R10.Svg.LogosExtra.r10 [ centerX ] (R10.Color.Svg.logo c.contextR10.theme) 32
             , R10.Paragraph.normalMarkdown [ Font.center ] "This is an example of a form made with [Elm](https://elm-lang.org/), [elm-ui](https://package.elm-lang.org/packages/mdgriffith/elm-ui/latest/) and [R10](https://package.elm-lang.org/packages/rakutentech/r10/latest/) ([Source code](https://github.com/rakutentech/r10/blob/master/examples/simpleForm/src/Main.elm))."
             , column [ spacing 20, width fill ] <| R10.Form.view model.form MsgForm
-            , map MsgForm <|
-                R10.Button.primary []
-                    { label = text "Sign In"
-                    , libu = R10.Libu.Bu <| Just <| R10.Form.msg.submit model.form.conf
-                    , translation = { key = "example" }
-                    }
+            , R10.Button.primary []
+                { label = text "Sign In"
+                , libu = R10.Libu.Bu <| Just SendMsgToReact
+                , translation = { key = "example" }
+                }
+            , text model.message.id
             ]
         )
