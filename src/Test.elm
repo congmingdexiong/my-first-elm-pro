@@ -1,145 +1,269 @@
-module Test exposing (..)
-
--- Press a button to send a GET request for random quotes.
---
--- Read how it works:
---   https://guide.elm-lang.org/effects/json.html
---
+module Test exposing (main)
 
 import Browser
-import Html exposing (..)
-import Html.Attributes exposing (style)
-import Html.Events exposing (..)
-import Http
-import Json.Decode exposing (Decoder, field, int, map4, string)
+import Dict exposing (Dict)
+import Element.WithContext exposing (..)
+import Element.WithContext.Font as Font
+import Html
+import R10.Button
+import R10.Card
+import R10.Color.AttrsBackground
+import R10.Color.Svg
+import R10.Context
+import R10.FontSize
+import R10.Form
+import R10.FormTypes
+import R10.Libu
+import R10.Paragraph
+import R10.Svg.LogosExtra
+import Set
 
 
-
--- MAIN
-
-
+main : Program () Model Msg
 main =
     Browser.element
         { init = init
-        , update = update
-        , subscriptions = subscriptions
         , view = view
+        , update = update
+        , subscriptions = \_ -> Sub.none
         }
 
 
-
--- MODEL
-
-
-type Model
-    = Failure
-    | Loading
-    | Success Quote
-
-
-type alias Quote =
-    { quote : String
-    , source : String
-    , author : String
-    , year : Int
-    }
-
-
-init : () -> ( Model, Cmd Msg )
-init _ =
-    ( Loading, getRandomQuote )
-
-
-
--- UPDATE
+type alias Model =
+    { form : R10.Form.Form }
 
 
 type Msg
-    = MorePlease
-    | GotQuote (Result Http.Error Quote)
+    = MsgForm R10.Form.Msg
 
 
-type Result error value
-    = Ok value
-    | Err error
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        MorePlease ->
-            ( Loading, getRandomQuote )
-
-        GotQuote result ->
-            case result of
-                Ok quote ->
-                    ( Success quote, Cmd.none )
-
-                Err _ ->
-                    ( Failure, Cmd.none )
-
-
-
--- SUBSCRIPTIONS
-
-
-subscriptions : Model -> Sub Msg
-subscriptions model =
-    Sub.none
-
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    div []
-        [ h2 [] [ text "Random Quotes" ]
-        , viewQuote model
-        ]
-
-
-viewQuote : Model -> Html Msg
-viewQuote model =
-    case model of
-        Failure ->
-            div []
-                [ text "I could not load a random quote for some reason. "
-                , button [ onClick MorePlease ] [ text "Try Again!" ]
-                ]
-
-        Loading ->
-            text "Loading..."
-
-        Success quote ->
-            div []
-                [ button [ onClick MorePlease, style "display" "block" ] [ text "More Please!" ]
-                , blockquote [] [ text quote.quote ]
-                , p [ style "text-align" "right" ]
-                    [ text "— "
-                    , cite [] [ text quote.source ]
-                    , text (" by " ++ quote.author ++ " (" ++ String.fromInt quote.year ++ ")")
+init : () -> ( Model, Cmd msg )
+init _ =
+    ( { form =
+            { conf =
+                [ R10.Form.entity.withTabs ""
+                    [ ( "Tab1"
+                      , R10.Form.entity.field
+                            { id = "email"
+                            , idDom = Nothing
+                            , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                            , label = "Email1"
+                            , clickableLabel = False
+                            , helperText = Just "Helper text for Email1"
+                            , requiredLabel = Just "(required)"
+                            , validationSpecs =
+                                Just
+                                    { pretendIsNotValidatedIfValid = True
+                                    , showAlsoPassedValidation = False
+                                    , validationIcon = R10.FormTypes.NoIcon
+                                    , validation =
+                                        [ R10.Form.commonValidation.email
+                                        , R10.Form.validation.minLength 5
+                                        , R10.Form.validation.maxLength 50
+                                        , R10.Form.validation.required
+                                        ]
+                                    }
+                            , minWidth = Nothing
+                            , maxWidth = Nothing
+                            , autocomplete = Nothing
+                            , placeholder = Nothing
+                            , allowOverMaxLength = False
+                            }
+                      )
+                    , ( "Tab2"
+                      , R10.Form.entity.normal "" <|
+                            [ R10.Form.entity.field <|
+                                { id = "email"
+                                , idDom = Nothing
+                                , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                                , label = "Email2"
+                                , clickableLabel = False
+                                , helperText = Just "Helper text for Email2"
+                                , requiredLabel = Just "(required)"
+                                , validationSpecs =
+                                    Just
+                                        { pretendIsNotValidatedIfValid = True
+                                        , showAlsoPassedValidation = False
+                                        , validationIcon = R10.FormTypes.NoIcon
+                                        , validation =
+                                            [ R10.Form.commonValidation.email
+                                            , R10.Form.validation.minLength 5
+                                            , R10.Form.validation.maxLength 50
+                                            , R10.Form.validation.required
+                                            ]
+                                        }
+                                , minWidth = Nothing
+                                , maxWidth = Nothing
+                                , autocomplete = Nothing
+                                , placeholder = Nothing
+                                , allowOverMaxLength = False
+                                }
+                            , R10.Form.entity.field <|
+                                { id = "email"
+                                , idDom = Nothing
+                                , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                                , label = "Email3"
+                                , clickableLabel = False
+                                , helperText = Just "Helper text for Email3"
+                                , requiredLabel = Just "(required)"
+                                , validationSpecs =
+                                    Just
+                                        { pretendIsNotValidatedIfValid = True
+                                        , showAlsoPassedValidation = False
+                                        , validationIcon = R10.FormTypes.NoIcon
+                                        , validation =
+                                            [ R10.Form.commonValidation.email
+                                            , R10.Form.validation.minLength 5
+                                            , R10.Form.validation.maxLength 50
+                                            , R10.Form.validation.required
+                                            ]
+                                        }
+                                , minWidth = Nothing
+                                , maxWidth = Nothing
+                                , autocomplete = Nothing
+                                , placeholder = Nothing
+                                , allowOverMaxLength = False
+                                }
+                            ]
+                      )
                     ]
                 ]
 
+            --             type alias State =
+            -- { fieldsState : Dict.Dict R10.Form.Internal.Key.KeyAsString R10.Form.Internal.FieldState.FieldState
+            -- , multiplicableQuantities : Dict.Dict R10.Form.Internal.Key.KeyAsString Int
+            -- , activeTabs : Dict.Dict R10.Form.Internal.Key.KeyAsString String
+            -- , focused : Maybe R10.Form.Internal.Key.KeyAsString
+            -- , active : Maybe R10.Form.Internal.Key.KeyAsString
+            -- , removed : Set.Set R10.Form.Internal.Key.KeyAsString
+            -- , qtySubmitAttempted : R10.Form.Internal.QtySubmitAttempted.QtySubmitAttempted
+            -- , changesSinceLastSubmissions : Bool
+            -- , lastKeyDownIsProcess : Bool
+            -- }
+            -- , state =
+            --     { fieldsState = Dict.empty
+            --     , multiplicableQuantities = Dict.empty
+            --     , activeTabs = Dict.empty
+            --     , focused = Nothing
+            --     , active = Nothing
+            --     , removed = Set.empty
+            --     , qtySubmitAttempted = 0
+            --     }
+            , state = R10.Form.initState
+            }
+      }
+    , Cmd.none
+    )
 
 
--- HTTP
+
+-- init _ =
+-- ( { form =
+--         { conf =
+--             [ R10.Form.entity.field
+--                 { id = "email"
+--                 , idDom = Nothing
+--                 , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+--                 , label = "Email"
+--                 , clickableLabel = False
+--                 , helperText = Just "Helper text for Email"
+--                 , requiredLabel = Just "(required)"
+--                 , validationSpecs =
+--                     Just
+--                         { pretendIsNotValidatedIfValid = True
+--                         , showAlsoPassedValidation = False
+--                         , validationIcon = R10.FormTypes.NoIcon
+--                         , validation =
+--                             [ R10.Form.commonValidation.email
+--                             , R10.Form.validation.minLength 5
+--                             , R10.Form.validation.maxLength 50
+--                             , R10.Form.validation.required
+--                             ]
+--                         }
+--                 , minWidth = Nothing
+--                 , maxWidth = Nothing
+--                 , autocomplete = Nothing
+--                 , placeholder = Nothing
+--                 , allowOverMaxLength = False
+--                 }
+--             , R10.Form.entity.field
+--                 { id = "password"
+--                 , idDom = Nothing
+--                 , type_ = R10.FormTypes.TypeText (R10.FormTypes.TextPasswordNew "Show password")
+--                 , label = "Password"
+--                 , clickableLabel = False
+--                 , helperText = Just "Helper text for Password"
+--                 , requiredLabel = Just "(required)"
+--                 , validationSpecs =
+--                     Just
+--                         { pretendIsNotValidatedIfValid = True
+--                         , showAlsoPassedValidation = False
+--                         , validationIcon = R10.FormTypes.NoIcon
+--                         , validation =
+--                             [ R10.Form.validation.minLength 8
+--                             , R10.Form.validation.required
+--                             ]
+--                         }
+--                 , minWidth = Nothing
+--                 , maxWidth = Nothing
+--                 , autocomplete = Nothing
+--                 , placeholder = Nothing
+--                 , allowOverMaxLength = False
+--                 }
+--             ]
+--         , state = R10.Form.initState
+--         }
+--   }
+-- , Cmd.none
+-- )
 
 
-getRandomQuote : Cmd Msg
-getRandomQuote =
-    Http.get
-        { url = "https://elm-lang.org/api/random-quotes"
-        , expect = Http.expectJson GotQuote quoteDecoder
+update : Msg -> Model -> ( Model, Cmd msg )
+update msg model =
+    case msg of
+        MsgForm msgForm ->
+            let
+                form : R10.Form.Form
+                form =
+                    model.form
+
+                ( newState, cmd ) =
+                    R10.Form.update (\_ a -> a) msgForm form.state
+
+                newForm : R10.Form.Form
+                newForm =
+                    { form | state = newState }
+
+                activeTab =
+                    R10.Form.getActiveTab "Tab1" model.form.state
+
+                _ =
+                    Debug.log "Active Tab" activeTab
+            in
+            ( { model | form = newForm }, Cmd.none )
+
+
+view : Model -> Html.Html Msg
+view model =
+    layoutWith R10.Context.default
+        { options =
+            [ focusStyle
+                { borderColor = Nothing
+                , backgroundColor = Nothing
+                , shadow = Nothing
+                }
+            ]
         }
-
-
-quoteDecoder : Decoder Quote
-quoteDecoder =
-    map4 Quote
-        (field "quote" string)
-        (field "source" string)
-        (field "author" string)
-        (field "year" int)
+        [ R10.Color.AttrsBackground.background, padding 20, R10.FontSize.normal ]
+        (column
+            (R10.Card.high
+                ++ [ centerX
+                   , centerY
+                   , width (fill |> maximum 360)
+                   , height shrink
+                   , spacing 30
+                   ]
+            )
+            [ column [ spacing 20, width fill ] <| R10.Form.view model.form MsgForm
+            ]
+        )
