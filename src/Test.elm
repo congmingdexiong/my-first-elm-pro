@@ -5,6 +5,7 @@ import Dict exposing (Dict)
 import Element.WithContext exposing (..)
 import Element.WithContext.Font as Font
 import Html
+import Html.Events as Events
 import R10.Button
 import R10.Card
 import R10.Color.AttrsBackground
@@ -35,16 +36,43 @@ type alias Model =
 
 type Msg
     = MsgForm R10.Form.Msg
+    | SendMsgToReact
 
 
 init : () -> ( Model, Cmd msg )
 init _ =
     ( { form =
             { conf =
-                [ R10.Form.entity.withTabs ""
+                [ R10.Form.entity.field
+                    { id = "XXX"
+                    , idDom = Nothing
+                    , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                    , label = "Email1"
+                    , clickableLabel = False
+                    , helperText = Just "Helper text for Email1"
+                    , requiredLabel = Just "(required)"
+                    , validationSpecs =
+                        Just
+                            { pretendIsNotValidatedIfValid = True
+                            , showAlsoPassedValidation = False
+                            , validationIcon = R10.FormTypes.NoIcon
+                            , validation =
+                                [ R10.Form.commonValidation.email
+                                , R10.Form.validation.minLength 5
+                                , R10.Form.validation.maxLength 50
+                                , R10.Form.validation.required
+                                ]
+                            }
+                    , minWidth = Nothing
+                    , maxWidth = Nothing
+                    , autocomplete = Nothing
+                    , placeholder = Nothing
+                    , allowOverMaxLength = False
+                    }
+                , R10.Form.entity.withTabs "1"
                     [ ( "Tab1"
                       , R10.Form.entity.field
-                            { id = "email"
+                            { id = "cardNumber"
                             , idDom = Nothing
                             , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
                             , label = "Email1"
@@ -234,11 +262,55 @@ update msg model =
                 newForm =
                     { form | state = newState }
 
-                activeTab =
-                    R10.Form.getActiveTab "Tab1" model.form.state
+                -- activeTab =
+                --     R10.Form.getActiveTab (R10.Form.keyToString <| R10.Form.listToKey <| [ "Tab1" ]) model.form.state
+                -- R10.Form.getActiveTab "Tab1" model.form.state
+                -- counter =
+                --     model.form.state
+                --         |> R10.Form.getActiveTab "1"
+                counter : Int
+                counter =
+                    model.form.state
+                        |> R10.Form.getFieldValue "cardNumber"
+                        |> Maybe.withDefault ""
+                        |> String.length
+                        |> modBy 3
+
+                data =
+                    R10.Form.getFieldValue "cardNumber" model.form.state
 
                 _ =
-                    Debug.log "Active Tab" activeTab
+                    Debug.log "Counter" counter
+
+                _ =
+                    Debug.log "data cardNumber" data
+
+                _ =
+                    Debug.log "datmodel.form.statea" model.form.state
+            in
+            ( { model | form = newForm }, Cmd.none )
+
+        SendMsgToReact ->
+            let
+                data =
+                    model.form.state
+                        |> R10.Form.getFieldValue
+                            "1/cardNumber"
+
+                newState =
+                    model.form.state
+
+                upDateState =
+                    { newState | activeTabs = Dict.fromList [ ( "1", "Tab2" ) ] }
+
+                form =
+                    model.form
+
+                newForm =
+                    { form | state = upDateState }
+
+                _ =
+                    Debug.log "data XXX" data
             in
             ( { model | form = newForm }, Cmd.none )
 
@@ -262,6 +334,7 @@ view model =
                    , width (fill |> maximum 360)
                    , height shrink
                    , spacing 30
+                   , htmlAttribute <| Events.onClick SendMsgToReact
                    ]
             )
             [ column [ spacing 20, width fill ] <| R10.Form.view model.form MsgForm
