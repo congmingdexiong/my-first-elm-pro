@@ -1,4 +1,4 @@
-e,(function(scope){
+(function(scope){
 'use strict';
 
 function F(arity, fun, wrapper) {
@@ -5162,22 +5162,57 @@ var $elm$browser$Browser$element = _Browser_element;
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
-	return _Utils_Tuple2(0, $elm$core$Platform$Cmd$none);
+	return _Utils_Tuple2(
+		{
+			items: _List_fromArray(
+				[
+					{id: 'item1', name: '苹果'},
+					{id: 'item2', name: '香蕉'},
+					{id: 'item3', name: '橘子'},
+					{id: 'item4', name: '橘子2'},
+					{id: 'item5', name: '橘子3'},
+					{id: 'item6', name: '橘子4'},
+					{id: 'item7', name: '橘子5'}
+				]),
+			message: {id: ''}
+		},
+		$elm$core$Platform$Cmd$none);
 };
-var $elm$core$Platform$Sub$batch = _Platform_batch;
-var $elm$core$Platform$Sub$none = $elm$core$Platform$Sub$batch(_List_Nil);
+var $author$project$Main$GotMessageFromReact = function (a) {
+	return {$: 'GotMessageFromReact', a: a};
+};
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$receiveFromReact = _Platform_incomingPort('receiveFromReact', $elm$json$Json$Decode$string);
+var $author$project$Main$subscriptions = function (_v0) {
+	return $author$project$Main$receiveFromReact($author$project$Main$GotMessageFromReact);
+};
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Main$callWindowFunction = _Platform_outgoingPort('callWindowFunction', $elm$json$Json$Encode$string);
+var $elm$core$Debug$log = _Debug_log;
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		if (msg.$ === 'Increment') {
-			return _Utils_Tuple2(model + 1, $elm$core$Platform$Cmd$none);
+		if (msg.$ === 'ClickEv') {
+			var id = msg.a;
+			var _v1 = A2($elm$core$Debug$log, '123', id);
+			return _Utils_Tuple2(
+				model,
+				$author$project$Main$callWindowFunction(id));
 		} else {
-			return _Utils_Tuple2(model - 1, $elm$core$Platform$Cmd$none);
+			return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Main$Decrement = {$: 'Decrement'};
-var $author$project$Main$Increment = {$: 'Increment'};
-var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $author$project$Main$ClickEv = function (a) {
+	return {$: 'ClickEv', a: a};
+};
+var $elm$html$Html$Attributes$stringProperty = F2(
+	function (key, string) {
+		return A2(
+			_VirtualDom_property,
+			key,
+			$elm$json$Json$Encode$string(string));
+	});
+var $elm$html$Html$Attributes$id = $elm$html$Html$Attributes$stringProperty('id');
 var $elm$virtual_dom$VirtualDom$Normal = function (a) {
 	return {$: 'Normal', a: a};
 };
@@ -5195,52 +5230,33 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
+var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
+var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $author$project$Main$itemToDiv = function (item) {
+	return A2(
+		$elm$html$Html$div,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$id(item.id),
+				A2($elm$html$Html$Attributes$style, 'width', '100%'),
+				A2($elm$html$Html$Attributes$style, 'border', '1px solid red'),
+				$elm$html$Html$Events$onClick(
+				$author$project$Main$ClickEv(item.id))
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('这是 ' + item.name)
+			]));
+};
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
 		_List_Nil,
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Main$Decrement)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('-')
-					])),
-				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				_List_fromArray(
-					[
-						$elm$html$Html$text(
-						$elm$core$String$fromInt(model))
-					])),
-				A2(
-				$elm$html$Html$button,
-				_List_fromArray(
-					[
-						$elm$html$Html$Events$onClick($author$project$Main$Increment)
-					]),
-				_List_fromArray(
-					[
-						$elm$html$Html$text('+')
-					]))
-			]));
+		A2($elm$core$List$map, $author$project$Main$itemToDiv, model.items));
 };
 var $author$project$Main$main = $elm$browser$Browser$element(
-	{
-		init: $author$project$Main$init,
-		subscriptions: function (_v0) {
-			return $elm$core$Platform$Sub$none;
-		},
-		update: $author$project$Main$update,
-		view: $author$project$Main$view
-	});
+	{init: $author$project$Main$init, subscriptions: $author$project$Main$subscriptions, update: $author$project$Main$update, view: $author$project$Main$view});
 _Platform_export({'Main':{'init':$author$project$Main$main(
 	$elm$json$Json$Decode$succeed(_Utils_Tuple0))(0)}});}(this));

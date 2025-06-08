@@ -2,101 +2,107 @@ port module Main exposing (main)
 
 import Browser
 import Html exposing (Html, div, text)
-import Html.Attributes exposing (style)
-import Json.Decode exposing (int, string)
+import Html.Attributes exposing (id, style)
+import Html.Events
 
 
 
--- MODEL
+-- 定义一个类型
 
 
-type alias Model =
-    { popupText : Maybe String
-    , popupPos : ( Int, Int )
+type Msg
+    = ClickEv String
+    | SendMsgToReact
+    | GotMessageFromReact String
+
+
+type alias Item =
+    { id : String
+    , name : String
     }
 
 
-init : () -> ( Model, Cmd Msg )
+type alias Model =
+    { message : { id : String }, items : List Item }
+
+
+init : () -> ( Model, Cmd msg )
 init _ =
-    ( { popupText = Nothing, popupPos = ( 0, 0 ) }
+    ( { message = { id = "" }
+      , items =
+            [ { id = "item1", name = "苹果" }
+            , { id = "item2", name = "香蕉" }
+            , { id = "item3", name = "橘子" }
+            , { id = "item4", name = "橘子2" }
+            , { id = "item5", name = "橘子3" }
+            , { id = "item6", name = "橘子4" }
+            , { id = "item7", name = "橘子5" }
+            ]
+      }
     , Cmd.none
     )
 
 
 
--- UPDATE
-
-
-type Msg
-    = ShowPopup String ( Int, Int )
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        ShowPopup selectedText ( x, y ) ->
-            ( { model | popupText = Just selectedText, popupPos = ( x, y ) }, Cmd.none )
-
-
-
--- VIEW
+-- 主视图函数
 
 
 view : Model -> Html Msg
 view model =
-    let
-        popupStyle =
-            [ style "position" "absolute"
-            , style "background" "#f0f0f0"
-            , style "border" "1px solid #ccc"
-            , style "padding" "8px"
-            , style "border-radius" "4px"
-            , style "box-shadow" "0 2px 8px rgba(0,0,0,0.2)"
-            , style "z-index" "1000"
-            , style "left" (String.fromInt (Tuple.first model.popupPos) ++ "px")
-            , style "top" (String.fromInt (Tuple.second model.popupPos) ++ "px")
-            ]
-    in
     div []
-        [ div []
-            [ text "请尝试选中这段文字，看看会发生什么。" ]
-        , case model.popupText of
-            Just content ->
-                div popupStyle [ text content ]
-
-            Nothing ->
-                text ""
-        ]
+        (List.map itemToDiv model.items)
 
 
 
--- PORTS
+-- 单个 item 转换为 div
 
 
-port sendSelection : ( String, Int, Int ) -> Cmd msg
+itemToDiv : Item -> Html Msg
+itemToDiv item =
+    div [ id item.id, style "width" "100%", style "border" "1px solid red", Html.Events.onClick <| ClickEv item.id ] [ text ("这是 " ++ item.name) ]
+
+
+port sendToReact : { id : String, data : String } -> Cmd msg
+
+
+port receiveFromReact : (String -> msg) -> Sub msg
 
 
 
--- 正确的 port 类型：这是一个订阅 port
+-- PORT：定义 JS 可以调用的方法名
 
 
-port receiveSelection : (( String, ( Int, Int ) ) -> msg) -> Sub msg
+port callWindowFunction : String -> Cmd msg
+
+
+update : Msg -> Model -> ( Model, Cmd msg )
+update msg model =
+    case msg of
+        ClickEv id ->
+            let
+                _ =
+                    Debug.log "123" id
+            in
+            ( model, callWindowFunction id )
+
+        _ ->
+            ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveSelection (\( text, pos ) -> ShowPopup text pos)
+    receiveFromReact GotMessageFromReact
 
 
 
--- MAIN
+-- 主程序入口
 
 
 main : Program () Model Msg
 main =
     Browser.element
         { init = init
-        , update = update
         , view = view
+        , update = update
         , subscriptions = subscriptions
         }
