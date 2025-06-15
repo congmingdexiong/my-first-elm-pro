@@ -1,9 +1,11 @@
 port module Main exposing (main)
 
 import Browser
+import Dict exposing (Dict)
 import Html exposing (Html, div, text)
 import Html.Attributes exposing (id, style)
 import Html.Events
+import Json.Decode as Decode
 
 
 
@@ -12,8 +14,8 @@ import Html.Events
 
 type Msg
     = ClickEv String
-    | SendMsgToReact
-    | GotMessageFromReact String
+    | SendMsgToReact String
+    | GotMessageFromReact Decode.Value
 
 
 type alias Item =
@@ -23,7 +25,7 @@ type alias Item =
 
 
 type alias Model =
-    { message : { id : String }, items : List Item }
+    { message : { id : String }, items : List Item, inputs : Dict String String }
 
 
 init : () -> ( Model, Cmd msg )
@@ -38,6 +40,7 @@ init _ =
             , { id = "item6", name = "橘子4" }
             , { id = "item7", name = "橘子5" }
             ]
+      , inputs = Dict.empty
       }
     , Cmd.none
     )
@@ -50,7 +53,13 @@ init _ =
 view : Model -> Html Msg
 view model =
     div []
-        (List.map itemToDiv model.items)
+        [ div
+            []
+            (List.map itemToDiv model.items)
+        , div
+            [ Html.Events.onClick <| SendMsgToReact "!23" ]
+            [ text "click me" ]
+        ]
 
 
 
@@ -62,10 +71,10 @@ itemToDiv item =
     div [ id item.id, style "width" "100%", style "border" "1px solid red", Html.Events.onClick <| ClickEv item.id ] [ text ("这是 " ++ item.name) ]
 
 
-port sendToReact : { id : String, data : String } -> Cmd msg
+port sendToReact : () -> Cmd msg
 
 
-port receiveFromReact : (String -> msg) -> Sub msg
+port receiveFromReact : (Decode.Value -> msg) -> Sub msg
 
 
 
@@ -85,8 +94,25 @@ update msg model =
             in
             ( model, callWindowFunction id )
 
-        _ ->
-            ( model, Cmd.none )
+        SendMsgToReact id ->
+            let
+                _ =
+                    Debug.log "123" id
+            in
+            ( model, sendToReact () )
+
+        GotMessageFromReact inputVal ->
+            case Decode.decodeValue (Decode.dict Decode.string) inputVal of
+                Ok dict ->
+                    let
+                        _ =
+                            Debug.log "dict" dict
+                    in
+                    ( { model | inputs = dict }, Cmd.none )
+
+                Err err ->
+                    -- 解码失败时，你可以打印或记录错误信息
+                    ( model, Cmd.none )
 
 
 subscriptions : Model -> Sub Msg

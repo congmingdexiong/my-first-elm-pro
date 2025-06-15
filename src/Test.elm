@@ -43,33 +43,7 @@ init : () -> ( Model, Cmd msg )
 init _ =
     ( { form =
             { conf =
-                [ R10.Form.entity.field
-                    { id = "XXX"
-                    , idDom = Nothing
-                    , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
-                    , label = "Email1"
-                    , clickableLabel = False
-                    , helperText = Just "Helper text for Email1"
-                    , requiredLabel = Just "(required)"
-                    , validationSpecs =
-                        Just
-                            { pretendIsNotValidatedIfValid = True
-                            , showAlsoPassedValidation = False
-                            , validationIcon = R10.FormTypes.NoIcon
-                            , validation =
-                                [ R10.Form.commonValidation.email
-                                , R10.Form.validation.minLength 5
-                                , R10.Form.validation.maxLength 50
-                                , R10.Form.validation.required
-                                ]
-                            }
-                    , minWidth = Nothing
-                    , maxWidth = Nothing
-                    , autocomplete = Nothing
-                    , placeholder = Nothing
-                    , allowOverMaxLength = False
-                    }
-                , R10.Form.entity.withTabs "1"
+                [ R10.Form.entity.withTabs ""
                     [ ( "Tab1"
                       , R10.Form.entity.field
                             { id = "cardNumber"
@@ -85,11 +59,7 @@ init _ =
                                     , showAlsoPassedValidation = False
                                     , validationIcon = R10.FormTypes.NoIcon
                                     , validation =
-                                        [ R10.Form.commonValidation.email
-                                        , R10.Form.validation.minLength 5
-                                        , R10.Form.validation.maxLength 50
-                                        , R10.Form.validation.required
-                                        ]
+                                        []
                                     }
                             , minWidth = Nothing
                             , maxWidth = Nothing
@@ -114,11 +84,7 @@ init _ =
                                         , showAlsoPassedValidation = False
                                         , validationIcon = R10.FormTypes.NoIcon
                                         , validation =
-                                            [ R10.Form.commonValidation.email
-                                            , R10.Form.validation.minLength 5
-                                            , R10.Form.validation.maxLength 50
-                                            , R10.Form.validation.required
-                                            ]
+                                            []
                                         }
                                 , minWidth = Nothing
                                 , maxWidth = Nothing
@@ -126,32 +92,29 @@ init _ =
                                 , placeholder = Nothing
                                 , allowOverMaxLength = False
                                 }
-                            , R10.Form.entity.field <|
-                                { id = "email"
-                                , idDom = Nothing
-                                , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
-                                , label = "Email3"
-                                , clickableLabel = False
-                                , helperText = Just "Helper text for Email3"
-                                , requiredLabel = Just "(required)"
-                                , validationSpecs =
-                                    Just
-                                        { pretendIsNotValidatedIfValid = True
-                                        , showAlsoPassedValidation = False
-                                        , validationIcon = R10.FormTypes.NoIcon
-                                        , validation =
-                                            [ R10.Form.commonValidation.email
-                                            , R10.Form.validation.minLength 5
-                                            , R10.Form.validation.maxLength 50
-                                            , R10.Form.validation.required
-                                            ]
-                                        }
-                                , minWidth = Nothing
-                                , maxWidth = Nothing
-                                , autocomplete = Nothing
-                                , placeholder = Nothing
-                                , allowOverMaxLength = False
-                                }
+
+                            -- , R10.Form.entity.field <|
+                            --     { id = "email"
+                            --     , idDom = Nothing
+                            --     , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                            --     , label = "Email3"
+                            --     , clickableLabel = False
+                            --     , helperText = Just "Helper text for Email3"
+                            --     , requiredLabel = Just "(required)"
+                            --     , validationSpecs =
+                            --         Just
+                            --             { pretendIsNotValidatedIfValid = True
+                            --             , showAlsoPassedValidation = False
+                            --             , validationIcon = R10.FormTypes.NoIcon
+                            --             , validation =
+                            --                 []
+                            --             }
+                            --     , minWidth = Nothing
+                            --     , maxWidth = Nothing
+                            --     , autocomplete = Nothing
+                            --     , placeholder = Nothing
+                            --     , allowOverMaxLength = False
+                            --     }
                             ]
                       )
                     ]
@@ -279,14 +242,12 @@ update msg model =
                 data =
                     R10.Form.getFieldValue "cardNumber" model.form.state
 
-                _ =
-                    Debug.log "Counter" counter
-
-                _ =
-                    Debug.log "data cardNumber" data
-
-                _ =
-                    Debug.log "datmodel.form.statea" model.form.state
+                -- _ =
+                --     Debug.log "Counter" counter
+                -- _ =
+                --     Debug.log "data cardNumber" data
+                -- _ =
+                --     Debug.log "datmodel.form.statea" model.form.state
             in
             ( { model | form = newForm }, Cmd.none )
 
@@ -300,19 +261,16 @@ update msg model =
                 newState =
                     model.form.state
 
-                upDateState =
-                    { newState | activeTabs = Dict.fromList [ ( "1", "Tab2" ) ] }
-
-                form =
-                    model.form
-
-                newForm =
-                    { form | state = upDateState }
-
-                _ =
-                    Debug.log "data XXX" data
+                -- upDateState =
+                --     { newState | activeTabs = Dict.fromList [ ( "1", "Tab2" ) ] }
+                -- form =
+                --     model.form
+                -- newForm =
+                --     { form | state = upDateState }
+                -- _ =
+                --     Debug.log "data XXX" data
             in
-            ( { model | form = newForm }, Cmd.none )
+            ( model, Cmd.none )
 
 
 view : Model -> Html.Html Msg
