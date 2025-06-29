@@ -5159,217 +5159,73 @@ var $elm$core$Task$perform = F2(
 				A2($elm$core$Task$map, toMessage, task)));
 	});
 var $elm$browser$Browser$element = _Browser_element;
-var $elm$core$Dict$RBEmpty_elm_builtin = {$: 'RBEmpty_elm_builtin'};
-var $elm$core$Dict$empty = $elm$core$Dict$RBEmpty_elm_builtin;
+var $author$project$Main$Model = function (value) {
+	return {value: value};
+};
 var $elm$core$Platform$Cmd$batch = _Platform_batch;
 var $elm$core$Platform$Cmd$none = $elm$core$Platform$Cmd$batch(_List_Nil);
 var $author$project$Main$init = function (_v0) {
 	return _Utils_Tuple2(
-		{
-			inputs: $elm$core$Dict$empty,
-			items: _List_fromArray(
-				[
-					{id: 'item1', name: '苹果'},
-					{id: 'item2', name: '香蕉'},
-					{id: 'item3', name: '橘子'},
-					{id: 'item4', name: '橘子2'},
-					{id: 'item5', name: '橘子3'},
-					{id: 'item6', name: '橘子4'},
-					{id: 'item7', name: '橘子5'}
-				]),
-			message: {id: ''}
-		},
+		$author$project$Main$Model(''),
 		$elm$core$Platform$Cmd$none);
 };
-var $author$project$Main$GotMessageFromReact = function (a) {
-	return {$: 'GotMessageFromReact', a: a};
+var $author$project$Main$GotReact = function (a) {
+	return {$: 'GotReact', a: a};
 };
-var $elm$json$Json$Decode$value = _Json_decodeValue;
-var $author$project$Main$receiveFromReact = _Platform_incomingPort('receiveFromReact', $elm$json$Json$Decode$value);
+var $elm$json$Json$Decode$string = _Json_decodeString;
+var $author$project$Main$receiveFromReact = _Platform_incomingPort('receiveFromReact', $elm$json$Json$Decode$string);
 var $author$project$Main$subscriptions = function (_v0) {
-	return $author$project$Main$receiveFromReact($author$project$Main$GotMessageFromReact);
-};
-var $elm$json$Json$Encode$string = _Json_wrap;
-var $author$project$Main$callWindowFunction = _Platform_outgoingPort('callWindowFunction', $elm$json$Json$Encode$string);
-var $elm$json$Json$Decode$decodeValue = _Json_run;
-var $elm$core$Dict$Black = {$: 'Black'};
-var $elm$core$Dict$RBNode_elm_builtin = F5(
-	function (a, b, c, d, e) {
-		return {$: 'RBNode_elm_builtin', a: a, b: b, c: c, d: d, e: e};
-	});
-var $elm$core$Dict$Red = {$: 'Red'};
-var $elm$core$Dict$balance = F5(
-	function (color, key, value, left, right) {
-		if ((right.$ === 'RBNode_elm_builtin') && (right.a.$ === 'Red')) {
-			var _v1 = right.a;
-			var rK = right.b;
-			var rV = right.c;
-			var rLeft = right.d;
-			var rRight = right.e;
-			if ((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) {
-				var _v3 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var lLeft = left.d;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					key,
-					value,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, lK, lV, lLeft, lRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, rK, rV, rLeft, rRight));
-			} else {
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					color,
-					rK,
-					rV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, left, rLeft),
-					rRight);
-			}
-		} else {
-			if ((((left.$ === 'RBNode_elm_builtin') && (left.a.$ === 'Red')) && (left.d.$ === 'RBNode_elm_builtin')) && (left.d.a.$ === 'Red')) {
-				var _v5 = left.a;
-				var lK = left.b;
-				var lV = left.c;
-				var _v6 = left.d;
-				var _v7 = _v6.a;
-				var llK = _v6.b;
-				var llV = _v6.c;
-				var llLeft = _v6.d;
-				var llRight = _v6.e;
-				var lRight = left.e;
-				return A5(
-					$elm$core$Dict$RBNode_elm_builtin,
-					$elm$core$Dict$Red,
-					lK,
-					lV,
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, llK, llV, llLeft, llRight),
-					A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, key, value, lRight, right));
-			} else {
-				return A5($elm$core$Dict$RBNode_elm_builtin, color, key, value, left, right);
-			}
-		}
-	});
-var $elm$core$Basics$compare = _Utils_compare;
-var $elm$core$Dict$insertHelp = F3(
-	function (key, value, dict) {
-		if (dict.$ === 'RBEmpty_elm_builtin') {
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Red, key, value, $elm$core$Dict$RBEmpty_elm_builtin, $elm$core$Dict$RBEmpty_elm_builtin);
-		} else {
-			var nColor = dict.a;
-			var nKey = dict.b;
-			var nValue = dict.c;
-			var nLeft = dict.d;
-			var nRight = dict.e;
-			var _v1 = A2($elm$core$Basics$compare, key, nKey);
-			switch (_v1.$) {
-				case 'LT':
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						A3($elm$core$Dict$insertHelp, key, value, nLeft),
-						nRight);
-				case 'EQ':
-					return A5($elm$core$Dict$RBNode_elm_builtin, nColor, nKey, value, nLeft, nRight);
-				default:
-					return A5(
-						$elm$core$Dict$balance,
-						nColor,
-						nKey,
-						nValue,
-						nLeft,
-						A3($elm$core$Dict$insertHelp, key, value, nRight));
-			}
-		}
-	});
-var $elm$core$Dict$insert = F3(
-	function (key, value, dict) {
-		var _v0 = A3($elm$core$Dict$insertHelp, key, value, dict);
-		if ((_v0.$ === 'RBNode_elm_builtin') && (_v0.a.$ === 'Red')) {
-			var _v1 = _v0.a;
-			var k = _v0.b;
-			var v = _v0.c;
-			var l = _v0.d;
-			var r = _v0.e;
-			return A5($elm$core$Dict$RBNode_elm_builtin, $elm$core$Dict$Black, k, v, l, r);
-		} else {
-			var x = _v0;
-			return x;
-		}
-	});
-var $elm$core$Dict$fromList = function (assocs) {
-	return A3(
-		$elm$core$List$foldl,
-		F2(
-			function (_v0, dict) {
-				var key = _v0.a;
-				var value = _v0.b;
-				return A3($elm$core$Dict$insert, key, value, dict);
-			}),
-		$elm$core$Dict$empty,
-		assocs);
-};
-var $elm$json$Json$Decode$keyValuePairs = _Json_decodeKeyValuePairs;
-var $elm$json$Json$Decode$dict = function (decoder) {
-	return A2(
-		$elm$json$Json$Decode$map,
-		$elm$core$Dict$fromList,
-		$elm$json$Json$Decode$keyValuePairs(decoder));
+	return $author$project$Main$receiveFromReact($author$project$Main$GotReact);
 };
 var $elm$core$Debug$log = _Debug_log;
-var $elm$json$Json$Encode$null = _Json_encodeNull;
-var $author$project$Main$sendToReact = _Platform_outgoingPort(
-	'sendToReact',
+var $elm$json$Json$Encode$object = function (pairs) {
+	return _Json_wrap(
+		A3(
+			$elm$core$List$foldl,
+			F2(
+				function (_v0, obj) {
+					var k = _v0.a;
+					var v = _v0.b;
+					return A3(_Json_addField, k, v, obj);
+				}),
+			_Json_emptyObject(_Utils_Tuple0),
+			pairs));
+};
+var $elm$json$Json$Encode$string = _Json_wrap;
+var $author$project$Main$renderReact = _Platform_outgoingPort(
+	'renderReact',
 	function ($) {
-		return $elm$json$Json$Encode$null;
+		return $elm$json$Json$Encode$object(
+			_List_fromArray(
+				[
+					_Utils_Tuple2(
+					'divId',
+					$elm$json$Json$Encode$string($.divId)),
+					_Utils_Tuple2(
+					'initialValue',
+					$elm$json$Json$Encode$string($.initialValue))
+				]));
 	});
-var $elm$json$Json$Decode$string = _Json_decodeString;
 var $author$project$Main$update = F2(
 	function (msg, model) {
-		switch (msg.$) {
-			case 'ClickEv':
-				var id = msg.a;
-				var _v1 = A2($elm$core$Debug$log, '123', id);
-				return _Utils_Tuple2(
+		if (msg.$ === 'RenderReact') {
+			return _Utils_Tuple2(
+				model,
+				$author$project$Main$renderReact(
+					{divId: 'react-target', initialValue: ''}));
+		} else {
+			var val = msg.a;
+			var _v1 = A2($elm$core$Debug$log, 'val', val);
+			return _Utils_Tuple2(
+				_Utils_update(
 					model,
-					$author$project$Main$callWindowFunction(id));
-			case 'SendMsgToReact':
-				var id = msg.a;
-				var _v2 = A2($elm$core$Debug$log, '123', id);
-				return _Utils_Tuple2(
-					model,
-					$author$project$Main$sendToReact(_Utils_Tuple0));
-			default:
-				var inputVal = msg.a;
-				var _v3 = A2(
-					$elm$json$Json$Decode$decodeValue,
-					$elm$json$Json$Decode$dict($elm$json$Json$Decode$string),
-					inputVal);
-				if (_v3.$ === 'Ok') {
-					var dict = _v3.a;
-					var _v4 = A2($elm$core$Debug$log, 'dict', dict);
-					return _Utils_Tuple2(
-						_Utils_update(
-							model,
-							{inputs: dict}),
-						$elm$core$Platform$Cmd$none);
-				} else {
-					var err = _v3.a;
-					return _Utils_Tuple2(model, $elm$core$Platform$Cmd$none);
-				}
+					{value: val}),
+				$elm$core$Platform$Cmd$none);
 		}
 	});
-var $author$project$Main$SendMsgToReact = function (a) {
-	return {$: 'SendMsgToReact', a: a};
-};
+var $author$project$Main$RenderReact = {$: 'RenderReact'};
+var $elm$html$Html$button = _VirtualDom_node('button');
 var $elm$html$Html$div = _VirtualDom_node('div');
-var $author$project$Main$ClickEv = function (a) {
-	return {$: 'ClickEv', a: a};
-};
 var $elm$html$Html$Attributes$stringProperty = F2(
 	function (key, string) {
 		return A2(
@@ -5395,26 +5251,8 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $elm$virtual_dom$VirtualDom$style = _VirtualDom_style;
-var $elm$html$Html$Attributes$style = $elm$virtual_dom$VirtualDom$style;
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
-var $author$project$Main$itemToDiv = function (item) {
-	return A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$id(item.id),
-				A2($elm$html$Html$Attributes$style, 'width', '100%'),
-				A2($elm$html$Html$Attributes$style, 'border', '1px solid red'),
-				$elm$html$Html$Events$onClick(
-				$author$project$Main$ClickEv(item.id))
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('这是 ' + item.name)
-			]));
-};
 var $author$project$Main$view = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -5422,19 +5260,28 @@ var $author$project$Main$view = function (model) {
 		_List_fromArray(
 			[
 				A2(
-				$elm$html$Html$div,
-				_List_Nil,
-				A2($elm$core$List$map, $author$project$Main$itemToDiv, model.items)),
+				$elm$html$Html$button,
+				_List_fromArray(
+					[
+						$elm$html$Html$Events$onClick($author$project$Main$RenderReact)
+					]),
+				_List_fromArray(
+					[
+						$elm$html$Html$text('Render React')
+					])),
 				A2(
 				$elm$html$Html$div,
 				_List_fromArray(
 					[
-						$elm$html$Html$Events$onClick(
-						$author$project$Main$SendMsgToReact('!23'))
+						$elm$html$Html$Attributes$id('react-target')
 					]),
+				_List_Nil),
+				A2(
+				$elm$html$Html$div,
+				_List_Nil,
 				_List_fromArray(
 					[
-						$elm$html$Html$text('click me')
+						$elm$html$Html$text('Input: ' + model.value)
 					]))
 			]));
 };

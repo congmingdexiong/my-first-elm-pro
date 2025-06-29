@@ -10,23 +10,13 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./src/main.js":
-/*!*********************!*\
-  !*** ./src/main.js ***!
-  \*********************/
+/***/ "./src/index.js":
+/*!**********************!*\
+  !*** ./src/index.js ***!
+  \**********************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _reactBridge__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./reactBridge */ \"./src/reactBridge.js\");\n\nconst app = Elm.Main.init({\n  node: document.getElementById('elm-root')\n});\napp.ports.renderReact.subscribe(_ref => {\n  let {\n    divId,\n    initialValue\n  } = _ref;\n  (0,_reactBridge__WEBPACK_IMPORTED_MODULE_0__.renderReactComponent)(divId, {\n    initialValue,\n    onChange: val => app.ports.receiveFromReact.send(val)\n  });\n});\n\n//# sourceURL=webpack://react-basic/./src/main.js?");
-
-/***/ }),
-
-/***/ "./src/reactBridge.js":
-/*!****************************!*\
-  !*** ./src/reactBridge.js ***!
-  \****************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   renderReactComponent: () => (/* binding */ renderReactComponent)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ \"./node_modules/react-dom/client.js\");\n\n\nfunction ElmControlledReact(_ref) {\n  let {\n    initialValue,\n    onChange\n  } = _ref;\n  const [value, setValue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(initialValue);\n  function handleChange(e) {\n    const newVal = e.target.value;\n    setValue(newVal);\n    onChange(newVal);\n  }\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(\"input\", {\n    value: value,\n    onChange: handleChange,\n    placeholder: \"Type here\"\n  });\n}\nfunction renderReactComponent(containerId, props) {\n  const container = document.getElementById(containerId);\n  if (!container) {\n    console.error(\"Container \".concat(containerId, \" not found\"));\n    return;\n  }\n  const root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(container);\n  root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ElmControlledReact, {\n    initialValue: props.initialValue,\n    onChange: props.onChange\n  }));\n}\n\n//# sourceURL=webpack://react-basic/./src/reactBridge.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   renderReactComponent: () => (/* binding */ renderReactComponent)\n/* harmony export */ });\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var react_dom_client__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom/client */ \"./node_modules/react-dom/client.js\");\n// import React from 'react';\n// import ReactDOM from 'react-dom/client';\n// import App from './App.js';\n// import reportWebVitals from './reportWebVitals';\n// import { Provider } from 'react-redux';\n// import store from './store/index.js';\n\n// window.reactRegistry = {};        // 存放每个 React 实例的引用\n// window.reactMsgHandler = {};      // 每个组件的“接收消息”函数\n// window.inputs = {}\n\n// function renderCmp(id) {\n//   if (!id) {\n//     console.log(\"id不存在\");\n//     return;\n//   }\n\n//   const el = document.getElementById(id);\n//   if (!el) {\n//     console.log(\"root element不存在！！\");\n//     return;\n//   }\n\n//   let root = window.reactRegistry[id];\n\n//   if (!root) {\n//     root = ReactDOM.createRoot(el);\n//     window.reactRegistry[id] = root;\n//   }\n\n//   root.render(\n//     <Provider store={store}>\n//       <App id={id} />\n//     </Provider>\n//   );\n// }\n// window.renderCmp = renderCmp;\n// console.log('123:', 123);\n\n// window.renderCmp('root')\n\n// // If you want to start measuring performance in your app, pass a function\n// // to log results (for example: reportWebVitals(console.log))\n// // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals\n// reportWebVitals();\n// reactBridge.js\n\n\nfunction ElmControlledReact(_ref) {\n  let {\n    initialValue,\n    onChange\n  } = _ref;\n  const [value, setValue] = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(initialValue);\n  function handleChange(e) {\n    const newVal = e.target.value;\n    setValue(newVal);\n    onChange(newVal);\n  }\n  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(\"input\", {\n    value: value,\n    onChange: handleChange,\n    placeholder: \"Type here\"\n  });\n}\nfunction renderReactComponent(containerId, props) {\n  const container = document.getElementById(containerId);\n  if (!container) {\n    console.error(\"Container \".concat(containerId, \" not found\"));\n    return;\n  }\n  const root = react_dom_client__WEBPACK_IMPORTED_MODULE_1__.createRoot(container);\n  root.render(/*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ElmControlledReact, {\n    initialValue: props.initialValue,\n    onChange: props.onChange\n  }));\n}\n\n//# sourceURL=webpack://react-basic/./src/index.js?");
 
 /***/ }),
 
@@ -184,7 +174,7 @@ eval("\n\nif (false) {} else {\n  module.exports = __webpack_require__(/*! ./cjs
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./src/main.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./src/index.js");
 /******/ 	
 /******/ })()
 ;

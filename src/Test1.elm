@@ -273,7 +273,8 @@ logoCreaditCard formState =
                 |> Maybe.withDefault ""
                 |> String.length
                 |> modBy 3
-        _ = 
+
+        _ =
             Debug.log "logoCreaditCard counter" counter
     in
     case counter of

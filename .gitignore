@@ -1,4 +1,18 @@
-# elm-package generated files
-elm-stuff
-# elm-repl generated files
-repl-temp-*
+# Elm build output
+elm.js
+elm-stuff/
+.elm-spa/
+
+# Dependencies (if using npm)
+node_modules/
+
+# Editor/OS-specific
+.DS_Store
+*.swp
+*.swo
+*.tmp
+*.log
+
+# Environment variables or secrets
+.env
+.env.*

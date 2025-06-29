@@ -1,102 +1,322 @@
-module Main%20copy%202 exposing (..)port module Main exposing (main)
+module Main%20copy%202 exposing (..)module Main exposing (main)
 
 import Browser
-import Html exposing (Html, div, text)
-import Html.Attributes exposing (style)
-import Json.Decode exposing (int, string)
-
-
-
--- MODEL
-
-
-type alias Model =
-    { popupText : Maybe String
-    , popupPos : ( Int, Int )
-    }
-
-
-init : () -> ( Model, Cmd Msg )
-init _ =
-    ( { popupText = Nothing, popupPos = ( 0, 0 ) }
-    , Cmd.none
-    )
-
-
-
--- UPDATE
-
-
-type Msg
-    = ShowPopup String ( Int, Int )
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        ShowPopup selectedText ( x, y ) ->
-            ( { model | popupText = Just selectedText, popupPos = ( x, y ) }, Cmd.none )
-
-
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    let
-        popupStyle =
-            [ style "position" "absolute"
-            , style "background" "#f0f0f0"
-            , style "border" "1px solid #ccc"
-            , style "padding" "8px"
-            , style "border-radius" "4px"
-            , style "box-shadow" "0 2px 8px rgba(0,0,0,0.2)"
-            , style "z-index" "1000"
-            , style "left" (String.fromInt (Tuple.first model.popupPos) ++ "px")
-            , style "top" (String.fromInt (Tuple.second model.popupPos) ++ "px")
-            ]
-    in
-    div []
-        [ div []
-            [ text "请尝试选中这段文字，看看会发生什么。" ]
-        , case model.popupText of
-            Just content ->
-                div popupStyle [ text content ]
-
-            Nothing ->
-                text ""
-        ]
-
-
-
--- PORTS
-
-
-port sendSelection : ( String, Int, Int ) -> Cmd msg
-
-
-
--- 正确的 port 类型：这是一个订阅 port
-
-
-port receiveSelection : (( String, ( Int, Int ) ) -> msg) -> Sub msg
-
-
-subscriptions : Model -> Sub Msg
-subscriptions _ =
-    receiveSelection (\( text, pos ) -> ShowPopup text pos)
-
-
-
--- MAIN
+import Dict exposing (Dict)
+import Element.WithContext exposing (..)
+import Element.WithContext.Font as Font
+import Html
+import Html.Events as Events
+import R10.Button
+import R10.Card
+import R10.Color.AttrsBackground
+import R10.Color.Svg
+import R10.Context
+import R10.FontSize
+import R10.Form
+import R10.FormTypes
+import R10.Libu
+import R10.Paragraph
+import R10.Svg.LogosExtra
+import Set
 
 
 main : Program () Model Msg
 main =
     Browser.element
         { init = init
-        , update = update
         , view = view
-        , subscriptions = subscriptions
+        , update = update
+        , subscriptions = \_ -> Sub.none
         }
+
+
+type alias Model =
+    { form : R10.Form.Form }
+
+
+type Msg
+    = MsgForm R10.Form.Msg
+    | SendMsgToReact
+    | BtnClick
+
+
+init : () -> ( Model, Cmd msg )
+init _ =
+    ( { form =
+            { conf =
+                [ R10.Form.entity.withTabs "1"
+                    [ ( "Tab1"
+                      , R10.Form.entity.field
+                            { id = "cardNumber"
+                            , idDom = Nothing
+                            , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                            , label = "Email1"
+                            , clickableLabel = False
+                            , helperText = Just "Helper text for Email1"
+                            , requiredLabel = Just "(required)"
+                            , validationSpecs =
+                                Just
+                                    { pretendIsNotValidatedIfValid = True
+                                    , showAlsoPassedValidation = False
+                                    , validationIcon = R10.FormTypes.NoIcon
+                                    , validation =
+                                        []
+                                    }
+                            , minWidth = Nothing
+                            , maxWidth = Nothing
+                            , autocomplete = Nothing
+                            , placeholder = Nothing
+                            , allowOverMaxLength = False
+                            }
+                      )
+                    , ( "Tab2"
+                      , R10.Form.entity.normal "xxx2" <|
+                            [ R10.Form.entity.field <|
+                                { id = "email"
+                                , idDom = Nothing
+                                , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                                , label = "Email2"
+                                , clickableLabel = False
+                                , helperText = Just "Helper text for Email2"
+                                , requiredLabel = Just "(required)"
+                                , validationSpecs =
+                                    Just
+                                        { pretendIsNotValidatedIfValid = True
+                                        , showAlsoPassedValidation = False
+                                        , validationIcon = R10.FormTypes.NoIcon
+                                        , validation =
+                                            []
+                                        }
+                                , minWidth = Nothing
+                                , maxWidth = Nothing
+                                , autocomplete = Nothing
+                                , placeholder = Nothing
+                                , allowOverMaxLength = False
+                                }
+
+                            -- , R10.Form.entity.field <|
+                            --     { id = "email"
+                            --     , idDom = Nothing
+                            --     , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+                            --     , label = "Email3"
+                            --     , clickableLabel = False
+                            --     , helperText = Just "Helper text for Email3"
+                            --     , requiredLabel = Just "(required)"
+                            --     , validationSpecs =
+                            --         Just
+                            --             { pretendIsNotValidatedIfValid = True
+                            --             , showAlsoPassedValidation = False
+                            --             , validationIcon = R10.FormTypes.NoIcon
+                            --             , validation =
+                            --                 []
+                            --             }
+                            --     , minWidth = Nothing
+                            --     , maxWidth = Nothing
+                            --     , autocomplete = Nothing
+                            --     , placeholder = Nothing
+                            --     , allowOverMaxLength = False
+                            --     }
+                            ]
+                      )
+                    ]
+                ]
+
+            --             type alias State =
+            -- { fieldsState : Dict.Dict R10.Form.Internal.Key.KeyAsString R10.Form.Internal.FieldState.FieldState
+            -- , multiplicableQuantities : Dict.Dict R10.Form.Internal.Key.KeyAsString Int
+            -- , activeTabs : Dict.Dict R10.Form.Internal.Key.KeyAsString String
+            -- , focused : Maybe R10.Form.Internal.Key.KeyAsString
+            -- , active : Maybe R10.Form.Internal.Key.KeyAsString
+            -- , removed : Set.Set R10.Form.Internal.Key.KeyAsString
+            -- , qtySubmitAttempted : R10.Form.Internal.QtySubmitAttempted.QtySubmitAttempted
+            -- , changesSinceLastSubmissions : Bool
+            -- , lastKeyDownIsProcess : Bool
+            -- }
+            -- , state =
+            --     { fieldsState = Dict.empty
+            --     , multiplicableQuantities = Dict.empty
+            --     , activeTabs = Dict.empty
+            --     , focused = Nothing
+            --     , active = Nothing
+            --     , removed = Set.empty
+            --     , qtySubmitAttempted = 0
+            --     }
+            , state = R10.Form.initState
+            }
+      }
+    , Cmd.none
+    )
+
+
+
+-- init _ =
+-- ( { form =
+--         { conf =
+--             [ R10.Form.entity.field
+--                 { id = "email"
+--                 , idDom = Nothing
+--                 , type_ = R10.FormTypes.TypeText R10.FormTypes.TextEmail
+--                 , label = "Email"
+--                 , clickableLabel = False
+--                 , helperText = Just "Helper text for Email"
+--                 , requiredLabel = Just "(required)"
+--                 , validationSpecs =
+--                     Just
+--                         { pretendIsNotValidatedIfValid = True
+--                         , showAlsoPassedValidation = False
+--                         , validationIcon = R10.FormTypes.NoIcon
+--                         , validation =
+--                             [ R10.Form.commonValidation.email
+--                             , R10.Form.validation.minLength 5
+--                             , R10.Form.validation.maxLength 50
+--                             , R10.Form.validation.required
+--                             ]
+--                         }
+--                 , minWidth = Nothing
+--                 , maxWidth = Nothing
+--                 , autocomplete = Nothing
+--                 , placeholder = Nothing
+--                 , allowOverMaxLength = False
+--                 }
+--             , R10.Form.entity.field
+--                 { id = "password"
+--                 , idDom = Nothing
+--                 , type_ = R10.FormTypes.TypeText (R10.FormTypes.TextPasswordNew "Show password")
+--                 , label = "Password"
+--                 , clickableLabel = False
+--                 , helperText = Just "Helper text for Password"
+--                 , requiredLabel = Just "(required)"
+--                 , validationSpecs =
+--                     Just
+--                         { pretendIsNotValidatedIfValid = True
+--                         , showAlsoPassedValidation = False
+--                         , validationIcon = R10.FormTypes.NoIcon
+--                         , validation =
+--                             [ R10.Form.validation.minLength 8
+--                             , R10.Form.validation.required
+--                             ]
+--                         }
+--                 , minWidth = Nothing
+--                 , maxWidth = Nothing
+--                 , autocomplete = Nothing
+--                 , placeholder = Nothing
+--                 , allowOverMaxLength = False
+--                 }
+--             ]
+--         , state = R10.Form.initState
+--         }
+--   }
+-- , Cmd.none
+-- )
+
+
+update : Msg -> Model -> ( Model, Cmd msg )
+update msg model =
+    case msg of
+        MsgForm msgForm ->
+            let
+                form : R10.Form.Form
+                form =
+                    model.form
+
+                ( newState, cmd ) =
+                    R10.Form.update (\_ a -> a) msgForm form.state
+
+                newForm : R10.Form.Form
+                newForm =
+                    { form | state = newState }
+
+                -- activeTab =
+                --     R10.Form.getActiveTab (R10.Form.keyToString <| R10.Form.listToKey <| [ "Tab1" ]) model.form.state
+                -- R10.Form.getActiveTab "Tab1" model.form.state
+                -- counter =
+                --     model.form.state
+                --         |> R10.Form.getActiveTab "1"
+                counter : Int
+                counter =
+                    model.form.state
+                        |> R10.Form.getFieldValue "cardNumber"
+                        |> Maybe.withDefault ""
+                        |> String.length
+                        |> modBy 3
+
+                data =
+                    R10.Form.getFieldValue "cardNumber" model.form.state
+
+                -- _ =
+                --     Debug.log "Counter" counter
+                -- _ =
+                --     Debug.log "data cardNumber" data
+                -- _ =
+                --     Debug.log "datmodel.form.statea" model.form.state
+            in
+            ( { model | form = newForm }, Cmd.none )
+
+        SendMsgToReact ->
+            let
+                data =
+                    model.form.state
+                        |> R10.Form.getFieldValue
+                            "1/cardNumber"
+
+                newState =
+                    model.form.state
+
+                -- upDateState =
+                --     { newState | activeTabs = Dict.fromList [ ( "1", "Tab2" ) ] }
+                -- form =
+                --     model.form
+                -- newForm =
+                --     { form | state = upDateState }
+                -- _ =
+                --     Debug.log "data XXX" data
+            in
+            ( model, Cmd.none )
+
+        BtnClick ->
+            let
+                -- state =
+                --     R10.Form.setActiveTab "1" "xxx2" model.form.state
+                state =
+                    R10.Form.setActiveTab "1" "xxx2" model.form.state
+
+                form =
+                    model.form
+
+                newForm =
+                    { form | state = state }
+                
+                R10.Form.onValueChange
+
+                _ =
+                    Debug.log "newForm" newForm.state
+            in
+            ( { model | form = newForm }, Cmd.none )
+
+
+view : Model -> Html.Html Msg
+view model =
+    layoutWith R10.Context.default
+        { options =
+            [ focusStyle
+                { borderColor = Nothing
+                , backgroundColor = Nothing
+                , shadow = Nothing
+                }
+            ]
+        }
+        [ R10.Color.AttrsBackground.background, padding 20, R10.FontSize.normal ]
+        (column
+            (R10.Card.high
+                ++ [ centerX
+                   , centerY
+                   , width (fill |> maximum 360)
+                   , height shrink
+                   , spacing 30
+                   , htmlAttribute <| Events.onClick SendMsgToReact
+                   ]
+            )
+            [ column [ spacing 20, width fill ] <| R10.Form.view model.form MsgForm
+            , html <| Html.button [ Events.onClick BtnClick ] [ Html.text "123" ]
+            ]
+        )

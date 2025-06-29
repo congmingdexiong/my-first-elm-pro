@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Elm App1</title>
+  </head>
+  <body>
+    <div id="elm-root"></div>
+    <div id="root"></div>
+    <!-- <script
+    defer="defer"
+    src="http://127.0.0.1:30001/public/static/js/main.6930de87.js"
+    ></script> -->
+    <!-- 引入编译后的 Elm JS -->
+    <script src="elm.js"></script>
+    <script src="bundle.js"></script>
+    <!-- <script src="http://127.0.0.1:30001/public/bundle.js"></script> -->
+
+    <!-- 初始化 Elm 应用 -->
+    <script>
+      var app = Elm.Main.init({ node: document.body });
+
+      // document.addEventListener('mouseup', function (e) {
+      //   const selection = window.getSelection();
+      //   const text = selection.toString().trim();
+      //   if (text.length > 0) {
+      //     const x = e.pageX;
+      //     const y = e.pageY + 10;
+      //     app.ports.receiveSelection.send([text, [x, y]]);
+      //   }
+      // });
+
+      // 监听 port，调用方法并传入参数
+      app.ports?.callWindowFunction.subscribe(function (msg) {
+        if (typeof window.renderCmp === "function") {
+          console.log(msg);
+
+          window.renderCmp(msg);
+        } else {
+          console.warn("window.renderCmp 未定义");
+        }
+      });
+      app.ports.sendToReact.subscribe(() => {
+        console.log("sendToReact start");
+        console.log(window.inputs);
+
+        app.ports.receiveFromReact.send(window.inputs);
+      });
+
+      // Elm → React 通信
+      // app.ports.sendToReact.subscribe(({ id, data }) => {
+      //   const handler = window.reactMsgHandler[id];
+      //   if (typeof handler === "function") {
+      //     handler(data);
+      //   } else {
+      //     console.warn("未注册 React handler: " + id);
+      //   }
+      // });
+      // // const app = Elm.Main.init({
+      // //   node: document.getElementById("elm-root"),
+      // // });
+      // // window.elmApp = app;
+      // // // 接收 Elm 发来的数据
+      // app.ports.sendToReact.subscribe(function (dataFromElm) {
+      //   // 转发给 React 应用（使用自定义事件）
+      //   window.dispatchEvent(
+      //     new CustomEvent("elm-to-react", {
+      //       detail: dataFromElm,
+      //     })
+      //   );
+      // });
+
+      // 示例：监听 port（可选）
+      // app.ports.somePort.subscribe(data => {
+      //   console.log("Received from Elm:", data);
+      // });
+    </script>
+  </body>
+</html>

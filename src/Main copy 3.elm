@@ -1,4 +1,4 @@
-module Main exposing (..)
+module Main%20copy%203 exposing (..)module Main exposing (main)
 
 import Browser
 import Dict exposing (Dict)
@@ -38,14 +38,13 @@ type Msg
     = MsgForm R10.Form.Msg
     | SendMsgToReact
     | BtnClick
-    | FieldChanged R10.Form.Key String -- key, new value
 
 
 init : () -> ( Model, Cmd msg )
 init _ =
     ( { form =
             { conf =
-                [ R10.Form.entity.withTabs "2"
+                [ R10.Form.entity.withTabs "1"
                     [ ( "Tab1"
                       , R10.Form.entity.field
                             { id = "cardNumber"
@@ -227,12 +226,6 @@ update msg model =
                 newForm =
                     { form | state = newState }
 
-                -- maybeFieldMsg =
-                --     R10.Form.onValueChange
-                --         (\key _ _ newVal ->
-                --             FieldChanged key newVal
-                --         )
-                --         msgForm
                 -- activeTab =
                 --     R10.Form.getActiveTab (R10.Form.keyToString <| R10.Form.listToKey <| [ "Tab1" ]) model.form.state
                 -- R10.Form.getActiveTab "Tab1" model.form.state
@@ -250,16 +243,8 @@ update msg model =
                 data =
                     R10.Form.getFieldValue "cardNumber" model.form.state
 
-                maybeFieldMsg =
-                    R10.Form.onValueChange
-                        (\key _ _ newVal ->
-                            FieldChanged key newVal
-                        )
-                        msgForm
-
-                _ =
-                    Debug.log "maybeFieldMsg" maybeFieldMsg
-
+                -- _ =
+                --     Debug.log "Counter" counter
                 -- _ =
                 --     Debug.log "data cardNumber" data
                 -- _ =
@@ -300,21 +285,12 @@ update msg model =
 
                 newForm =
                     { form | state = state }
+                
 
                 _ =
                     Debug.log "newForm" newForm.state
             in
             ( { model | form = newForm }, Cmd.none )
-
-        FieldChanged key newValue ->
-            let
-                _ =
-                    Debug.log "key" key
-
-                _ =
-                    Debug.log "newValue" newValue
-            in
-            ( model, Cmd.none )
 
 
 view : Model -> Html.Html Msg

@@ -1,19 +1,21 @@
-port module Main exposing (main)
+port module Main_interactive exposing (main)
 
 import Browser
 import Dict exposing (Dict)
-import Html exposing (Html, button, div, text)
+import Html exposing (Html, div, text)
 import Html.Attributes exposing (id, style)
-import Html.Events exposing (onClick)
+import Html.Events
 import Json.Decode as Decode
 
 
 
--- MODEL
+-- 定义一个类型
 
 
-type alias Model =
-    { message : { id : String }, items : List Item, inputs : Dict String String }
+type Msg
+    = ClickEv String
+    | SendMsgToReact String
+    | GotMessageFromReact Decode.Value
 
 
 type alias Item =
@@ -22,7 +24,11 @@ type alias Item =
     }
 
 
-init : () -> ( Model, Cmd Msg )
+type alias Model =
+    { message : { id : String }, items : List Item, inputs : Dict String String }
+
+
+init : () -> ( Model, Cmd msg )
 init _ =
     ( { message = { id = "" }
       , items =
@@ -40,27 +46,62 @@ init _ =
     )
 
 
+
+-- 主视图函数
+
+
+view : Model -> Html Msg
+view model =
+    div []
+        [ div
+            []
+            (List.map itemToDiv model.items)
+        , div
+            [ Html.Events.onClick <| SendMsgToReact "!23" ]
+            [ text "click me" ]
+        ]
+
+
+
+-- 单个 item 转换为 div
+
+
 itemToDiv : Item -> Html Msg
 itemToDiv item =
     div [ id item.id, style "width" "100%", style "border" "1px solid red", Html.Events.onClick <| ClickEv item.id ] [ text ("这是 " ++ item.name) ]
 
 
-
--- UPDATE
-
-
-type Msg
-    = RenderReact
-    | GotReact String
+port sendToReact : () -> Cmd msg
 
 
-update : Msg -> Model -> ( Model, Cmd Msg )
+port receiveFromReact : (Decode.Value -> msg) -> Sub msg
+
+
+
+-- PORT：定义 JS 可以调用的方法名
+
+
+port callWindowFunction : String -> Cmd msg
+
+
+update : Msg -> Model -> ( Model, Cmd msg )
 update msg model =
     case msg of
-        RenderReact ->
-            ( model, renderReact { divId = "react-target", initialValue = "" } )
+        ClickEv id ->
+            let
+                _ =
+                    Debug.log "123" id
+            in
+            ( model, callWindowFunction id )
 
-        GotReact inputVal ->
+        SendMsgToReact id ->
+            let
+                _ =
+                    Debug.log "123" id
+            in
+            ( model, sendToReact () )
+
+        GotMessageFromReact inputVal ->
             case Decode.decodeValue (Decode.dict Decode.string) inputVal of
                 Ok dict ->
                     let
@@ -74,36 +115,13 @@ update msg model =
                     ( model, Cmd.none )
 
 
-
--- VIEW
-
-
-view : Model -> Html Msg
-view model =
-    div []
-        [ button [ onClick RenderReact ] [ text "Render React" ]
-        , div [ id "react-target" ] []
-        , div [] [ text ("Input: " ++ model.value) ]
-        ]
-
-
-
--- SUBSCRIPTIONS
-
-
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    receiveFromReact GotReact
+    receiveFromReact GotMessageFromReact
 
 
 
--- PORTS
-
-
-port renderReact : { divId : String, initialValue : String } -> Cmd msg
-
-
-port receiveFromReact : (String -> msg) -> Sub msg
+-- 主程序入口
 
 
 main : Program () Model Msg
