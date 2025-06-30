@@ -5,6 +5,7 @@ import Dict exposing (Dict)
 import Element.WithContext exposing (..)
 import Element.WithContext.Font as Font
 import Html
+import Html.Attributes exposing (maxlength, minlength)
 import Html.Events as Events
 import R10.Button
 import R10.Card
@@ -12,7 +13,7 @@ import R10.Color.AttrsBackground
 import R10.Color.Svg
 import R10.Context
 import R10.FontSize
-import R10.Form
+import R10.Form exposing (Validation, ValidationMessage, validationCodes)
 import R10.FormTypes
 import R10.Libu
 import R10.Paragraph
@@ -61,7 +62,19 @@ init _ =
                                     , showAlsoPassedValidation = False
                                     , validationIcon = R10.FormTypes.NoIcon
                                     , validation =
-                                        []
+                                        [-- minlength 1,
+                                         --   R10.Form.validation.minLength 3
+                                         --   R10.Form.validation.withMsg
+                                         --     { ok = "ok111"
+                                         --     , err = "error"
+                                         --     }
+                                         --   <|
+                                         --     R10.Form.validation.minLength 3
+                                         -- R10.Form.validation.required
+                                         --   R10.Form.validation.minLength 3
+                                         -- maxlength 5
+                                         --   R10.Form.validationCodes
+                                        ]
                                     }
                             , minWidth = Nothing
                             , maxWidth = Nothing
@@ -303,6 +316,37 @@ update msg model =
 
                 _ =
                     Debug.log "newForm" newForm.state
+
+                updateCardNumberField field =
+                    if field.id == "cardNumber" then
+                        let
+                            updatedValidation =
+                                Just
+                                    { pretendIsNotValidatedIfValid = True
+                                    , showAlsoPassedValidation = False
+                                    , validationIcon = R10.FormTypes.NoIcon
+                                    , validation =
+                                        [ R10.Form.validation.required
+                                        ]
+                                    }
+                        in
+                        { field | validationSpecs = updatedValidation }
+                    else
+                        field
+
+                updatedForm =
+                    { model.form
+                        | conf =
+                            List.map
+                                (\tab ->
+                                    case tab of
+                                        R10.Form.EntityTab tabId fields ->
+                                            R10.Form.F.EntityTab tabId (List.map updateCardNumberField fields)
+                                        _ ->
+                                            tab
+                                )
+                                model.form.conf
+                    }
             in
             ( { model | form = newForm }, Cmd.none )
 
